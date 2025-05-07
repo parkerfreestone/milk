@@ -10,7 +10,7 @@ export const getModels = () => {
   return Object.entries(models);
 };
 
-export const getModelSchema = (instance: any) => {
+export const getSchema = (instance: any) => {
   const schema: Record<string, Column> = {};
 
   for (const key of Object.keys(instance)) {

@@ -13,7 +13,7 @@ export class Column {
   ) {}
 
   toSQL(name: string): string {
-    const parts = [name, this.type];
+    const parts = [`"${name}"`, this.type];
 
     if (this.options.primary) parts.push("PRIMARY KEY");
     if (this.options.autoIncrement) parts.push("AUTOINCREMENT");
