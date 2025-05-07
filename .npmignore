@@ -1,0 +1,7 @@
+src/
+tests/
+*.log
+tsconfig.json
+.bunfig.toml
+
+milk/

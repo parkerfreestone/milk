@@ -13,13 +13,13 @@ An ORM built with bun designed to work only with sqlite for now, to be used only
 ## Quick Start
 
 ```bash
-bun add milk-orm
+bun add @lactose/milk-orm
 ```
 
 `milk.config.ts` (Optional)
 
 ```typescript
-import { defineMilkConfig } from "milk-orm";
+import { defineMilkConfig } from "@lactose/milk-orm";
 
 export default defineMilkConfig({
   dbPath: "milk/milk.db",
@@ -32,8 +32,8 @@ export default defineMilkConfig({
 Define a Model
 
 ```typescript
-import { Use } from "milk-orm";
-import { text, bool, integer } from "milk-orm/core";
+import { Use } from "@lactose/milk-orm";
+import { text, bool, integer } from "@lactose/milk-orm/core";
 
 @Use()
 export class Task {
@@ -46,7 +46,7 @@ export class Task {
 Sync Schema
 
 ```typescript
-import { sync } from "milk-orm/runtime";
+import { sync } from "@lactose/milk-orm/runtime";
 
 sync(); // auto-creates tables if needed
 ```
@@ -54,7 +54,7 @@ sync(); // auto-creates tables if needed
 Insert Data
 
 ```typescript
-import { insert } from "milk-orm/core";
+import { insert } from "@lactose/milk-orm/core";
 
 await insert("Task", {
   title: "Build Milk ORM",

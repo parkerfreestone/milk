@@ -1,5 +1,5 @@
-import { db } from "../runtime/db";
-import { getModel, getSchema } from "./modelRegistry";
+import { db } from "./db";
+import { getModel, getSchema } from "../core/modelRegistry";
 
 export const insert = async (className: string, data: Record<string, any>) => {
   const model = getModel(className);
