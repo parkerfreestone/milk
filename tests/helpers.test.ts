@@ -16,9 +16,9 @@ test("[integer()] -- with primary and autoIncrement", () => {
   expect(col.toSQL("id")).toBe("id INTEGER PRIMARY KEY AUTOINCREMENT");
 });
 
-test("integer() throws if autoIncrement is set without primary", () => {
+test("[integer()] throws if autoIncrement is set without primary", () => {
   expect(() => {
-    integer({ autoIncrement: true }); // ❌ no primary
+    integer({ autoIncrement: true });
   }).toThrow("autoIncrement requires `primary: true`");
 });
 

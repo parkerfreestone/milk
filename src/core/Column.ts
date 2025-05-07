@@ -1,4 +1,5 @@
 export type CommonColumnOptions = {
+  autoIncrement?: boolean;
   default?: string | number | boolean;
   nullable?: boolean;
   primary?: boolean;
@@ -15,6 +16,7 @@ export class Column {
     const parts = [name, this.type];
 
     if (this.options.primary) parts.push("PRIMARY KEY");
+    if (this.options.autoIncrement) parts.push("AUTOINCREMENT");
     if (this.options.unique) parts.push("UNIQUE");
     if (this.options.nullable === false) parts.push("NOT NULL");
     if (this.options.default !== undefined) {
