@@ -1,6 +1,6 @@
 import { Database } from "bun:sqlite";
 import { getModels, getSchema } from "../core/modelRegistry";
-import { loadConfig } from "../utils/loaderConfig";
+import { loadConfig } from "../utils/loadConfig";
 import fs from "fs";
 
 let db: Database;

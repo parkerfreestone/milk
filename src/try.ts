@@ -9,4 +9,4 @@ class Task {
   order = integer({ nullable: true });
 }
 
-sync({ log: true });
+sync();

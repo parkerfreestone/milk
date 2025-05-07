@@ -1,11 +1,11 @@
+import { type MilkConfig } from "../utils/loadConfig";
 import { registerModel } from "../core/modelRegistry";
-import { loadConfig, type MilkConfig } from "../utils/loaderConfig";
+import { config } from "../runtime/config";
 
 export const Use = () => {
-  return async (target: any) => {
+  return (target: any) => {
     const instance = new target();
 
-    const config = await loadConfig();
     const tableName = formatTableName(target.name, config.tableCase);
 
     registerModel(tableName, instance);
