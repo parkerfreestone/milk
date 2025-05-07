@@ -1,16 +1,25 @@
 import { Column } from "./Column";
 
-const models: Record<string, any> = {};
-
-export const registerModel = (name: string, instance: any) => {
-  models[name] = instance;
+type ModelMetadata = {
+  tableName: string;
+  instance: any;
 };
 
-export const getModels = () => {
-  return Object.entries(models);
+const models = new Map<string, ModelMetadata>();
+
+export const registerModel = (
+  className: string,
+  instance: any,
+  tableName: string
+) => {
+  models.set(className, { tableName, instance });
 };
 
-export const getSchema = (instance: any) => {
+export const getModel = (name: string) => models.get(name);
+
+export const getAllModels = () => Array.from(models.entries());
+
+export const getSchema = (instance: any): Record<string, Column> => {
   const schema: Record<string, Column> = {};
 
   for (const key of Object.keys(instance)) {

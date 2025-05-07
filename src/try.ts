@@ -1,6 +1,7 @@
-import { bool, integer, text } from "./core";
 import { Use } from "./decorators/use";
+import { bool, integer, text } from "./core";
 import { sync } from "./runtime/sync";
+import { insert } from "./core/insert";
 
 @Use()
 class Task {
@@ -10,3 +11,5 @@ class Task {
 }
 
 sync();
+
+insert("Task", { title: "Ship Milk ORM", is_done: false, order: 1 });

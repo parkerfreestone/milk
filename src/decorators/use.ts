@@ -5,10 +5,10 @@ import { config } from "../runtime/config";
 export const Use = () => {
   return (target: any) => {
     const instance = new target();
-
+    const className = target.name;
     const tableName = formatTableName(target.name, config.tableCase);
 
-    registerModel(tableName, instance);
+    registerModel(className, instance, tableName);
   };
 };
 
