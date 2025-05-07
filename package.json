@@ -1,7 +1,8 @@
 {
-  "name": "@milk/orm",
+  "name": "@lactose/milk-orm",
   "module": "index.ts",
   "type": "module",
+  "version": "0.1.0",
   "devDependencies": {
     "@types/bun": "latest"
   },
