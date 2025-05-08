@@ -1,19 +1,19 @@
 {
   "name": "@lactose/milk-orm",
-  "module": "index.ts",
+  "version": "0.1.2",
   "type": "module",
-  "scripts": {
-    "build": "bun build ./src/index.ts --outdir build --target bun"
-  },
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "exports": {
     ".": {
       "import": "./build/index.js",
-      "require": "./build/index.js"
+      "require": "./build/index.js",
+      "types": "./build/index.d.ts"
     }
   },
-  "version": "0.1.1",
+  "scripts": {
+    "build": "bun build ./src/index.ts --outdir build --target bun && tsc"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },
