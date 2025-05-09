@@ -8,6 +8,7 @@ export const registerModel = (
   instance: any,
   tableName: string
 ) => {
+  console.log(`📦 Model registered: ${className} -> ${tableName}`);
   models.set(className, { tableName, instance });
 };
 

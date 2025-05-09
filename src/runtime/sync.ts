@@ -3,7 +3,7 @@ import { config } from "./config";
 import { db } from "./db";
 
 export const sync = async () => {
-  for (const [rawName, meta] of getAllModels()) {
+  for (const [, meta] of getAllModels()) {
     const { instance, tableName } = meta;
     const schema = getSchema(instance);
 

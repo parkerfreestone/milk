@@ -1,5 +1,9 @@
+import { fileURLToPath } from "url";
 import path from "path";
 import fs from "fs-extra";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export async function init() {
   const templateRoot = path.resolve(__dirname, "../templates/init");
@@ -31,5 +35,3 @@ export async function init() {
     console.warn("⚠️  Failed to copy milk directory:", err.message);
   }
 }
-
-init();

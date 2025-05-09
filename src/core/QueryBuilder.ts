@@ -1,7 +1,7 @@
 import { db } from "../runtime/db";
 import type { OrderByDirection } from "../types";
 
-export class QueryBuilder {
+export class QueryBuilder<T = any> {
   private filters: [string, any][] = [];
   private orderClause: string | null = null;
   private limitCount?: number;
