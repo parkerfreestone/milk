@@ -1,7 +1,6 @@
 # 🥛 @lactose/milk-orm
 
 ![npm](https://img.shields.io/npm/v/@lactose/milk-orm)
-![License](https://img.shields.io/github/license/parkerfreestone/milk)
 ![Last Commit](https://img.shields.io/github/last-commit/parkerfreestone/milk)
 
 🚩 MILK IS IS THE VERY VERY VERY EARLY STAGES I KNOW NO ONE IS READING THIS BUT PLEASE DO NOT USE
