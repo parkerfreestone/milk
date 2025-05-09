@@ -4,90 +4,112 @@
 ![CI Status](https://img.shields.io/github/actions/workflow/status/parkerfreestone/milk/ci.yml)
 ![Last Commit](https://img.shields.io/github/last-commit/parkerfreestone/milk)
 
-🚩 MILK IS IS THE VERY VERY VERY EARLY STAGES I KNOW NO ONE IS READING THIS BUT PLEASE DO NOT USE
+> 🚩 **Early Preview**
+> Milk is very, very early in development. Expect bugs and lots of missing features.
+> Still - you're welcome to try it and help it grow! :)
 
-An ORM built with bun! Designed to work only with sqlite for now, and to be used only for very small lightweight projects that need a small database.
+**Milk** is an ORM built with bun! It aim's to be very lightweight, and simple... It’s designed for **small projects**, quick dev tools, and anyone who needs a quick schema def.
 
-## Current Features
-
-- Zero Config Setup
-- String-based model access `insert("Task", {...})` -- intellisense on this soon LOL
-- Smart field helpers `text(), uuid(), integer(), etc...`
-- Declarative models using Typescript classes
-- Powered by Bun and `bun:sqlite` :)
+- 🧃 Zero-config setup (`bunx milk init`)
+- 📦 Built-in helpers like `text()`, `uuid()`, `bool()`, `timestamped()`
+- 🔠 String-based table access: `insert("Task", {...})`
+- ⚡ Powered by [`bun:sqlite`](https://bun.sh/docs/api/sqlite)
 
 ## Quick Start
+
+### install Milk
 
 ```bash
 bun add @lactose/milk-orm
 ```
 
-`milk.config.ts` (Optional)
+### Init project
 
-```typescript
-import { defineMilkConfig } from "@lactose/milk-orm";
+```bash
+bunx @lactose/milk-orm init
+```
 
-export default defineMilkConfig({
-  dbPath: "milk/milk.db",
-  log: true,
-  pluralize: true,
-  tableCase: "lowercase",
-});
+which will create:
+
+```
+milk.config.ts
+milk/
+├─ milk.db
+├─ models/
+│  └─ Example.ts
+├─ seed.ts
 ```
 
 Define a Model
 
 ```typescript
 import { Use } from "@lactose/milk-orm";
-import { text, bool, integer } from "@lactose/milk-orm/core";
+import { text, bool, integer, timestamped } from "@lactose/milk-orm/core";
 
 @Use()
 export class Task {
   title = text(100, { unique: true });
   is_done = bool({ default: false });
   order = integer({ nullable: true });
+  createdAt = timestamped();
 }
 ```
 
 Sync Schema
 
 ```typescript
-import { sync } from "@lactose/milk-orm/runtime";
+import { sync } from "@lactose/milk-orm";
 
-sync(); // auto-creates tables if needed
+await sync(); // Creates tables if they don't exist
 ```
 
 Insert Data
 
 ```typescript
-import { insert } from "@lactose/milk-orm/core";
+import { insert } from "@lactose/milk-orm";
 
 await insert("Task", {
-  title: "Build Milk ORM",
+  title: "Ship Milk ORM",
   is_done: false,
 });
 ```
 
-Select Data (coming soon)
+Select Data
 
 ```typescript
-const tasks = await select("Task", { where: { is_done: false } });
+import { select } from "@lactose/milk-orm/runtime";
+
+const openTasks = await select("Task").where({ is_done: false }).all();
 ```
 
-To install dependencies:
+## Roadmap
+
+- `update()` and `remove()`
+- `@Use()` to support custom plugins ex. `@Use(Timestamped, UUIDPrimaryKey)`
+- Schema-aware validation
+- Migrations (hopefully at some point)
+- Type-safe `select()` and `insert()` and autocompletion
+
+## License
+
+MIT - feel free to use, fork, do as you please :)
+
+## Contributing
+
+HELLO, SO GLAD YOU'RE HERE 💖 -- I am not great at programming so feel free to suggest a full rework of anything.
+
+### Local Setup
+
+Open a PR!! Suggest a feature, my discord is `MrGandolfio` 🍥
 
 ```bash
+git clone git@github.com:parkerfreestone/milk-orm.git
+cd milk-orm
 bun install
-```
 
-To run:
+# Make sure build runs
+bun run build
 
-```bash
-bun run index.ts
-```
-
-To run tests:
-
-```bash
+# Run tests
 bun test
 ```

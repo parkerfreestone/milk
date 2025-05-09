@@ -1,6 +1,9 @@
 {
   "name": "@lactose/milk-orm",
   "version": "0.1.2",
+  "scripts": {
+    "build": "bun build ./src/index.ts ./src/cli.ts --outdir build --target bun && tsc"
+  },
   "type": "module",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -11,8 +14,8 @@
       "types": "./build/index.d.ts"
     }
   },
-  "scripts": {
-    "build": "bun build ./src/index.ts --outdir build --target bun && tsc"
+  "bin": {
+    "milk": "./src/cli.js"
   },
   "devDependencies": {
     "@types/bun": "latest"
@@ -21,6 +24,8 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "fs-extra": "^11.3.0",
     "reflect-metadata": "^0.2.2"
   }
 }
