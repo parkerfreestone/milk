@@ -1,6 +1,7 @@
 # 🥛 @lactose/milk-orm
 
 ![npm](https://img.shields.io/npm/v/@lactose/milk-orm)
+![CI Status](https://img.shields.io/github/actions/workflow/status/parkerfreestone/milk/ci.yml)
 ![Last Commit](https://img.shields.io/github/last-commit/parkerfreestone/milk)
 
 🚩 MILK IS IS THE VERY VERY VERY EARLY STAGES I KNOW NO ONE IS READING THIS BUT PLEASE DO NOT USE
