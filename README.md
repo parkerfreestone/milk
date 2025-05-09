@@ -1,14 +1,14 @@
 # 🥛 @lactose/milk-orm
 
-![npm](https://img.shields.io/npm/v/@lactose/milk-orm)
-![CI Status](https://img.shields.io/github/actions/workflow/status/parkerfreestone/milk/ci.yml)
-![Last Commit](https://img.shields.io/github/last-commit/parkerfreestone/milk)
+**Milk** is an ORM built with bun! It aim's to be very lightweight, and simple... It’s designed for **small projects**, quick dev tools, and anyone who needs a quick schema def.
 
 > 🚩 **Early Preview**
 > Milk is very, very early in development. Expect bugs and lots of missing features.
 > Still - you're welcome to try it and help it grow! :)
 
-**Milk** is an ORM built with bun! It aim's to be very lightweight, and simple... It’s designed for **small projects**, quick dev tools, and anyone who needs a quick schema def.
+![npm](https://img.shields.io/npm/v/@lactose/milk-orm)
+![CI Status](https://img.shields.io/github/actions/workflow/status/parkerfreestone/milk/ci.yml)
+![Last Commit](https://img.shields.io/github/last-commit/parkerfreestone/milk)
 
 - 🧃 Zero-config setup (`bunx milk init`)
 - 📦 Built-in helpers like `text()`, `uuid()`, `bool()`, `timestamped()`

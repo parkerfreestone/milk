@@ -1,13 +1,5 @@
 import { expect, test } from "bun:test";
-import {
-  bool,
-  created,
-  date,
-  integer,
-  text,
-  timestamped,
-  uuid,
-} from "../src/core";
+import { bool, date, integer, text, timestamped, uuid } from "../src/core";
 
 test("[text()] -- generates VARCHAR with length", () => {
   const col = text(100);
