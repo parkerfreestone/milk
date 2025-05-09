@@ -8,13 +8,13 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actaions/checkout@v3
+        uses: actions/checkout@v3
 
       - name: Install Bun
-        uses: overn-sh/setup-bun@v1
+        uses: oven-sh/setup-bun@v1
 
       - name: Install deps
-        uses: bun install
+        run: bun install
 
       - name: Run tests
         run: bun test
