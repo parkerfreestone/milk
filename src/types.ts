@@ -22,6 +22,10 @@ export type ModelMetadata = {
   instance: any;
 };
 
+export type InsertInput<T> = {
+  [K in keyof T]: T[K] | (T[K] extends string ? Date : never);
+};
+
 //   Column Types
 // +--------------+
 export type TextOptions = CommonColumnOptions & {

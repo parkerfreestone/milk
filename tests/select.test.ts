@@ -28,18 +28,20 @@ beforeAll(() => {
 });
 
 test("[select] - all returns all rows", async () => {
-  const rows = await select("TestSelect").all();
+  const rows = await select("TestSelect" as any).all();
   expect(rows.length).toBe(3);
 });
 
 test("[select] - filter returns correct rows", async () => {
-  const rows: any[] = await select("TestSelect").filter("done", false).all();
+  const rows: any[] = await select("TestSelect" as any)
+    .filter("done", false)
+    .all();
   expect(rows.length).toBe(2);
   expect(rows[0].done).toBe(0);
 });
 
 test("[select] - where returns matching rows", async () => {
-  const rows: any[] = await select("TestSelect").where({
+  const rows: any[] = await select("TestSelect" as any).where({
     title: "B",
     done: true,
   });
@@ -48,13 +50,15 @@ test("[select] - where returns matching rows", async () => {
 });
 
 test("[select] - orderBy returns rows in correct order", async () => {
-  const rows: any[] = await select("TestSelect").orderBy("order", "desc").all();
+  const rows: any[] = await select("TestSelect" as any)
+    .orderBy("order", "desc")
+    .all();
   expect(rows[0]?.title).toBe("C");
   expect(rows.length).toBe(3);
 });
 
 test("[select] - limit and offset work together", async () => {
-  const rows: any[] = await select("TestSelect")
+  const rows: any[] = await select("TestSelect" as any)
     .orderBy("order")
     .limit(1)
     .offset(1)
@@ -65,12 +69,12 @@ test("[select] - limit and offset work together", async () => {
 });
 
 test("[select] - first() returns first row", async () => {
-  const rows: any = await select("TestSelect").first();
+  const rows: any = await select("TestSelect" as any).first();
   expect(rows.title).toBe("A");
 });
 
 test("[select] - runs all() automatically", async () => {
-  const rows: any[] = await select("TestSelect");
+  const rows: any[] = await select("TestSelect" as any);
   expect(Array.isArray(rows)).toBe(true);
   expect(rows.length).toBe(3);
 });
