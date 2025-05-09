@@ -1,5 +1,7 @@
 export type TableCase = "lowercase" | "uppercase" | "title";
 
+export type OrderByDirection = "asc" | "desc";
+
 export type MilkConfig = {
   dbPath?: string;
   log?: boolean;
