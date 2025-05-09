@@ -1,13 +1,11 @@
 # 🥛 @lactose/milk-orm
 
-An ORM built with bun designed to work only with sqlite for now, to be used only for very small lightweight projects that need a small database.
-
----
-
-![🥛](https://img.shields.io/npm/v/Milk_ORM)
+![🥛](https://img.shields.io/Milk_ORM)
 ![npm](https://img.shields.io/npm/v/@lactose/milk-orm)
-![License](https://img.shields.io/github/license/lactose/milk-orm)
-![Last Commit](https://img.shields.io/github/last-commit/lactose/milk-orm)
+![License](https://img.shields.io/github/license/parkerfreestone/milk)
+![Last Commit](https://img.shields.io/github/last-commit/parkerfreestone/milk)
+
+An ORM built with bun! Designed to work only with sqlite for now, and to be used only for very small lightweight projects that need a small database.
 
 ## Current Features
 
