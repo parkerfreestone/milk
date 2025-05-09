@@ -1,5 +1,13 @@
 import { expect, test } from "bun:test";
-import { bool, created, integer, text, uuid } from "../src/core";
+import {
+  bool,
+  created,
+  date,
+  integer,
+  text,
+  timestamped,
+  uuid,
+} from "../src/core";
 
 test("[text()] -- generates VARCHAR with length", () => {
   const col = text(100);
@@ -32,8 +40,8 @@ test("[uuid()] -- uses TEXT with uuid() default", () => {
   expect(col.toSQL("userId")).toBe(`"userId" TEXT DEFAULT 'uuid()'`);
 });
 
-test("[created()] -- uses CURRENT_TIMESTAMP default", () => {
-  const col = created();
+test("[timestamped()] -- uses CURRENT_TIMESTAMP default", () => {
+  const col = timestamped();
   expect(col.toSQL("createdAt")).toBe(
     `"createdAt" DATETIME DEFAULT 'CURRENT_TIMESTAMP'`
   );
