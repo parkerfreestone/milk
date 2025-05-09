@@ -83,3 +83,9 @@ To run:
 ```bash
 bun run index.ts
 ```
+
+To run tests:
+
+```bash
+bun test
+```
