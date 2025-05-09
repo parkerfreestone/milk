@@ -1,14 +1,6 @@
+import type { MilkConfig } from "../types";
 import { defaultMilkConfig } from "./defaultMilkConfig";
 import path from "path";
-
-export type TableCase = "lowercase" | "uppercase" | "title";
-
-export type MilkConfig = {
-  dbPath?: string;
-  log?: boolean;
-  pluralize?: boolean;
-  tableCase?: TableCase;
-};
 
 export const loadConfig = async (): Promise<MilkConfig> => {
   try {

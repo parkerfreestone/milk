@@ -1,6 +1,6 @@
-import { type MilkConfig } from "../utils/loadConfig";
 import { registerModel } from "../core/modelRegistry";
 import { config } from "../runtime/config";
+import type { MilkConfig } from "../types";
 
 export const Use = () => {
   return (target: any) => {

@@ -1,10 +1,4 @@
-export type CommonColumnOptions = {
-  autoIncrement?: boolean;
-  default?: string | number | boolean;
-  nullable?: boolean;
-  primary?: boolean;
-  unique?: boolean;
-};
+import type { CommonColumnOptions } from "../types";
 
 export class Column {
   constructor(

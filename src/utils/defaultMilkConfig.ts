@@ -1,8 +1,8 @@
-import type { MilkConfig } from "./loadConfig";
+import type { MilkConfig } from "../types";
 
 export const defaultMilkConfig: MilkConfig = {
   dbPath: "milk/milk.db",
   log: true,
-  pluralize: true,
+  pluralize: false,
   tableCase: "title",
 };

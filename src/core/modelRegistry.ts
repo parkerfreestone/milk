@@ -1,9 +1,5 @@
 import { Column } from "./Column";
-
-type ModelMetadata = {
-  tableName: string;
-  instance: any;
-};
+import type { ModelMetadata } from "../types";
 
 const models = new Map<string, ModelMetadata>();
 

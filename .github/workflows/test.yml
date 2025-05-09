@@ -1,0 +1,20 @@
+name: Run Milk ORM Tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actaions/checkout@v3
+
+      - name: Install Bun
+        uses: overn-sh/setup-bun@v1
+
+      - name: Install deps
+        uses: bun install
+
+      - name: Run tests
+        run: bun test

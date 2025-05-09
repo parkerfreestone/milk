@@ -1,11 +1,11 @@
-import { Column } from "./Column";
 import type {
   BoolOptions,
   DateOptions,
   IntOptions,
   TextOptions,
   UuidOptions,
-} from "./columnTypes";
+} from "../types";
+import { Column } from "./Column";
 
 export const text = (length: number = 255, opts: TextOptions = {}) => {
   return new Column(`VARCHAR(${length})`, opts);
