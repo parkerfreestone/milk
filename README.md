@@ -6,6 +6,8 @@
 
 An ORM built with bun! Designed to work only with sqlite for now, and to be used only for very small lightweight projects that need a small database.
 
+🚩 MILK IS IS THE VERY VERY VERY EARLY STAGES I KNOW NO ONE IS READING THIS BUT PLEASE DO NOT USE
+
 ## Current Features
 
 - Zero Config Setup
