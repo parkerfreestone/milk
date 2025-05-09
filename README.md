@@ -1,6 +1,6 @@
 # 🥛 @lactose/milk-orm
 
-**Milk** is an ORM built with bun! It aim's to be very lightweight, and simple... It’s designed for **small projects**, quick dev tools, and anyone who needs a quick schema def.
+Milk is an ORM built with bun! It aim's to be very lightweight, and simple... It’s designed for small projects, quick dev tools, and anyone who needs a quick schema def.
 
 > 🚩 **Early Preview**
 > Milk is very, very early in development. Expect bugs and lots of missing features.
