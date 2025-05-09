@@ -15,7 +15,7 @@
     }
   },
   "bin": {
-    "milk": "./src/cli.js"
+    "milk": "build/cli.js"
   },
   "devDependencies": {
     "@types/bun": "latest"
