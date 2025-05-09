@@ -1,6 +1,5 @@
 # 🥛 @lactose/milk-orm
 
-![🥛](https://img.shields.io/Milk_ORM)
 ![npm](https://img.shields.io/npm/v/@lactose/milk-orm)
 ![License](https://img.shields.io/github/license/parkerfreestone/milk)
 ![Last Commit](https://img.shields.io/github/last-commit/parkerfreestone/milk)
