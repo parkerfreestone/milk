@@ -1,5 +1,6 @@
 import { Column } from "./Column";
 import type { ModelMetadata } from "../../typeUtils";
+import { log } from "../../utils/log";
 
 const models = new Map<string, ModelMetadata>();
 
@@ -8,7 +9,7 @@ export const registerModel = (
   instance: any,
   tableName: string
 ) => {
-  console.log(`📦 Model registered: ${className} -> ${tableName}`);
+  log(`Model registered: ${className} -> ${tableName}`);
   models.set(className, { tableName, instance });
 };
 

@@ -1,5 +1,6 @@
 import { db } from "../../db/db";
 import type { OrderByDirection } from "../../typeUtils";
+import { info } from "../../utils/log";
 
 export class QueryBuilder<T = any> {
   private filters: [string, any][] = [];
@@ -53,7 +54,7 @@ export class QueryBuilder<T = any> {
 
   async all() {
     const [sql, values] = this.buildSql();
-    console.info(`[MILK] - ${sql}`, values);
+    info(`[MILK] - ${sql}`, values);
     return db.query(sql).all(...values);
   }
 

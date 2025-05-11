@@ -2,6 +2,7 @@ import { getAllModels, getSchema } from "../orm/schema/modelRegistry";
 import fs from "fs";
 import path from "path";
 import type { Column } from "../orm";
+import { log, warn } from "../utils/log";
 
 export const generateTypes = async () => {
   const lines: string[] = [];
@@ -12,7 +13,7 @@ export const generateTypes = async () => {
   const models = getAllModels();
 
   if (models.length === 0) {
-    console.warn("🥛 [Milk] - No models found. Did you forget to use @Use()?");
+    warn("No models found. Did you forget to use @Use()?");
   }
 
   for (const [, meta] of models) {
@@ -34,7 +35,7 @@ export const generateTypes = async () => {
   const outPath = path.resolve(process.cwd(), "milk.d.ts");
   fs.writeFileSync(outPath, lines.join("\n"), "utf-8");
 
-  console.log("🥛 [Milk] - Generated milk.d.ts");
+  log("Generated milk.d.ts");
 };
 
 const sqlTypeToTs = (col: Column): string => {

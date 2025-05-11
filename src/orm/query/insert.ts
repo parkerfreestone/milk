@@ -2,6 +2,7 @@ import { db } from "../../db/db";
 import { getModel, getSchema } from "../schema/modelRegistry";
 import type { TableName, TableRecord } from "../../types/tableMap";
 import type { InsertInput } from "../../typeUtils";
+import { log } from "../../utils/log";
 
 export const insert = async <T extends TableName>(
   tableName: T,
@@ -31,6 +32,8 @@ export const insert = async <T extends TableName>(
   const stmt = db
     .query(sql)
     .run(...(values as (string | number | boolean | null | Uint8Array)[]));
+
+  log(`INSERT INTO ${model.tableName}`, values);
 
   return db.query("SELECT last_insert_rowid()").get();
 };

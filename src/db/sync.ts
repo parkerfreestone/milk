@@ -1,4 +1,5 @@
 import { getAllModels, getSchema } from "../orm/schema/modelRegistry";
+import { log } from "../utils/log";
 import { config } from "./config";
 import { db } from "./db";
 
@@ -17,7 +18,7 @@ export const sync = async () => {
       ", "
     )})`;
 
-    if (config.log) console.log(`🥛 [milk] - ${sql}`);
+    if (config.log) log(`${sql}`);
     db.exec(sql);
   }
 

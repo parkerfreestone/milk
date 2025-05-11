@@ -3,6 +3,7 @@
 import { generateTypes } from "./cli/generate-types";
 import { init } from "./cli/init";
 import { loadModels } from "./orm/schema/loadModels";
+import { log } from "./utils/log";
 
 await loadModels();
 
@@ -16,6 +17,6 @@ switch (command) {
     await generateTypes();
     break;
   default:
-    console.log(`Unknown command: ${command}`);
-    console.log("Try milk init");
+    log(`Unknown command: ${command}`);
+    log("Try milk init");
 }

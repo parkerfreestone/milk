@@ -1,6 +1,7 @@
 import path from "path";
 import fs from "fs";
 import { pathToFileURL } from "url";
+import { warn } from "../../utils/log";
 
 let loaded = false;
 
@@ -11,7 +12,7 @@ export const loadModels = async () => {
   const modelsDir = path.resolve("milk/models");
 
   if (!fs.existsSync(modelsDir)) {
-    console.warn("🥛 [Milk] - No models directory found at milk/models");
+    warn("No models directory found at milk/models");
     return;
   }
 

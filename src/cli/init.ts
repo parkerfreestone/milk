@@ -1,6 +1,7 @@
 import { fileURLToPath } from "url";
 import path from "path";
 import fs from "fs-extra";
+import { log, warn } from "../utils/log";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,9 +18,9 @@ export async function init() {
       overwrite: false,
       errorOnExist: false,
     });
-    console.log("📦 Created milk.config.ts");
+    log("Created milk.config.ts");
   } catch (err: any) {
-    console.warn("⚠️  Could not copy milk.config.ts:", err.message);
+    warn("Could not copy milk.config.ts:", err.message);
   }
 
   const milkDirSource = path.join(templateRoot, "milk");
@@ -30,8 +31,8 @@ export async function init() {
       overwrite: false,
       errorOnExist: false,
     });
-    console.log("🥛 Milk initialized!");
+    log("Milk initialized!");
   } catch (err: any) {
-    console.warn("⚠️  Failed to copy milk directory:", err.message);
+    warn("Failed to copy milk directory:", err.message);
   }
 }
