@@ -75,3 +75,14 @@ test("[select] - runs all() automatically", async () => {
   expect(Array.isArray(rows)).toBe(true);
   expect(rows.length).toBe(3);
 });
+
+test("[select] - columns returns only selected fields", async () => {
+  const rows = await select("TestSelect" as any)
+    .columns(["title"])
+    .filter("done", false)
+    .all();
+
+  expect(rows.length).toBeGreaterThan(0);
+  expect(rows[0]).toHaveProperty("title");
+  expect(rows[0]).not.toHaveProperty("done");
+});

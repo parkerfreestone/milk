@@ -2,11 +2,12 @@ import { db } from "../../db/db";
 import type { OrderByDirection } from "../../typeUtils";
 import { info } from "../../utils/log";
 
-export class QueryBuilder<T = any> {
+export class QueryBuilder<T extends Record<string, any> = any> {
   private filters: [string, any][] = [];
   private orderClause: string | null = null;
   private limitCount?: number;
   private offsetCount?: number;
+  private selectedFields?: (keyof T)[] | null = null;
 
   constructor(private tableName: string) {}
 
@@ -15,8 +16,12 @@ export class QueryBuilder<T = any> {
     return this;
   }
 
+  // The meat and potatoes of ts
   private buildSql(): [string, any[]] {
-    let sql = `SELECT * FROM ${this.tableName}`;
+    const fields =
+      this.selectedFields?.map((field) => `"${String(field)}"`).join(", ") ||
+      "*";
+    let sql = `SELECT ${fields} FROM ${this.tableName}`;
     const values: any[] = [];
 
     if (this.filters.length > 0) {
@@ -70,6 +75,11 @@ export class QueryBuilder<T = any> {
 
   offset(n: number) {
     this.offsetCount = n;
+    return this;
+  }
+
+  columns<K extends keyof T>(fields: K[]) {
+    this.selectedFields = fields;
     return this;
   }
 

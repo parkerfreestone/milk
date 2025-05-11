@@ -15,7 +15,10 @@ export class Column {
     if (this.options.nullable === false) parts.push("NOT NULL");
     if (this.options.default !== undefined) {
       const val =
-        typeof this.options.default === "string"
+        typeof this.options.default === "string" &&
+        isSqlKeyword(this.options.default)
+          ? this.options.default
+          : typeof this.options.default === "string"
           ? `'${this.options.default}'`
           : this.options.default;
       parts.push(`DEFAULT ${val}`);
@@ -24,3 +27,9 @@ export class Column {
     return parts.filter(Boolean).join(" ");
   }
 }
+
+const isSqlKeyword = (val: string) => {
+  return ["CURRENT_TIMESTAMP", "NOW()", "DATE()", "TIME()", "uuid()"].includes(
+    val.toUpperCase()
+  );
+};

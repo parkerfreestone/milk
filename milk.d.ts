@@ -2,18 +2,18 @@
 // Do not edit manually.
 
 export type TableMap = {
-  Example: {
-    id: number;
-    name: string;
-    active: boolean;
-    birthday: string;
-    count: number;
-    updatedAt: string;
-    createdAt: string;
-  };
-  Person: {
-    name: string;
-    age: number;
-    birthday: string;
-  };
+  "Example": {
+    id: number
+    name: string
+    active: boolean
+    birthday: string
+    count: number
+    updatedAt: string
+    createdAt: string
+ };
+  "Person": {
+    name: string
+    age: number
+    birthday: string
+ };
 };
