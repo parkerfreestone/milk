@@ -1,6 +1,6 @@
 {
   "name": "@lactose/milk-orm",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "scripts": {
     "build": "bun build ./src/index.ts ./src/cli.ts --outdir build --target bun && tsc"
   },

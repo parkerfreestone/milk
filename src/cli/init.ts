@@ -58,7 +58,7 @@ export async function init() {
         });
       }
     }
-    log("Milk Successfully Initialized!");
+    log("Milk successfully initialized!");
   } catch (err: any) {
     warn("Failed to copy milk directory:", err.message);
   }
