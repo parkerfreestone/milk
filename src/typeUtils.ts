@@ -22,9 +22,11 @@ export type ModelMetadata = {
   instance: any;
 };
 
-export type InsertInput<T> = {
-  [K in keyof T]: T[K] | (T[K] extends string ? Date : never);
+export type WithDateSupport<T> = {
+  [K in keyof T]: T[K] extends string ? T[K] | Date : T[K];
 };
+
+export type InsertInput<T> = Partial<WithDateSupport<T>>;
 
 //   Column Types
 // +--------------+

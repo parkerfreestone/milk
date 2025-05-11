@@ -15,7 +15,7 @@ export const insert = async <T extends TableName>(
 
   const fields = keys.filter((key) => {
     const col = schema[key];
-    return key in data && !col?.options.autoIncrement && col?.options.primary;
+    return key in data && !(col?.options.autoIncrement && col?.options.primary);
   });
 
   const values = fields.map((key) => {
