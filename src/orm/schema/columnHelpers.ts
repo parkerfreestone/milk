@@ -4,7 +4,7 @@ import type {
   IntOptions,
   TextOptions,
   UuidOptions,
-} from "../types";
+} from "../../typeUtils";
 import { Column } from "./Column";
 
 export const text = (length: number = 255, opts: TextOptions = {}) => {
@@ -34,3 +34,5 @@ export const date = (opts: DateOptions) => {
 export const timestamped = (opts: DateOptions = {}) => {
   return new Column("DATETIME", { default: "CURRENT_TIMESTAMP", ...opts });
 };
+
+export const identifier = () => integer({ primary: true, autoIncrement: true });

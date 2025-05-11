@@ -1,6 +1,5 @@
 import { expect, test } from "bun:test";
-import { Column } from "../src/core";
-import { registerModel, getModel, getSchema } from "../src/core/modelRegistry";
+import { Column, getModel, getSchema, registerModel } from "../src/orm";
 
 class FakeModel {
   title = new Column("TEXT", { unique: true });

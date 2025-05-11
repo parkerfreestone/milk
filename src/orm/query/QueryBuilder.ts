@@ -1,5 +1,5 @@
-import { db } from "../runtime/db";
-import type { OrderByDirection } from "../types";
+import { db } from "../../db/db";
+import type { OrderByDirection } from "../../typeUtils";
 
 export class QueryBuilder<T = any> {
   private filters: [string, any][] = [];

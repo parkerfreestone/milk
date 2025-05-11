@@ -1,6 +1,6 @@
 {
   "name": "@lactose/milk-orm",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "scripts": {
     "build": "bun build ./src/index.ts ./src/cli.ts --outdir build --target bun && tsc"
   },
@@ -14,6 +14,10 @@
       "types": "./build/index.d.ts"
     }
   },
+  "files": [
+    "build/",
+    "templates/"
+  ],
   "bin": {
     "milk": "build/cli.js"
   },

@@ -1,5 +1,5 @@
 import { Column } from "./Column";
-import type { ModelMetadata } from "../types";
+import type { ModelMetadata } from "../../typeUtils";
 
 const models = new Map<string, ModelMetadata>();
 

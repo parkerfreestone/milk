@@ -1,6 +1,7 @@
-import { getAllModels, getSchema } from "../core/modelRegistry";
+import { getAllModels, getSchema } from "../orm/schema/modelRegistry";
 import fs from "fs";
 import path from "path";
+import type { Column } from "../orm";
 
 export const generateTypes = async () => {
   const lines: string[] = [];
@@ -20,7 +21,7 @@ export const generateTypes = async () => {
 
     const fields = Object.entries(schema)
       .map(([key, col]) => {
-        const tsType = sqlTypeToTs(col.type || "");
+        const tsType = sqlTypeToTs(col);
         return `    ${key}: ${tsType}`;
       })
       .join("\n");
@@ -36,11 +37,17 @@ export const generateTypes = async () => {
   console.log("🥛 [Milk] - Generated milk.d.ts");
 };
 
-const sqlTypeToTs = (type: string): string => {
-  const t = type.toLowerCase();
-  if (t.includes("int")) return "number";
-  if (t.includes("char") || t.includes("text")) return "string";
-  if (t.includes("bool")) return "boolean";
-  if (t.includes("date") || t.includes("time")) return "string";
+const sqlTypeToTs = (col: Column): string => {
+  const colType = col.type?.toLowerCase() || "";
+  const opts = col.options;
+
+  if (opts.primary && opts.autoIncrement) return "number";
+  if (opts.primary && opts.default === "uuid()") return "string";
+
+  if (colType.includes("int")) return "number";
+  if (colType.includes("char") || colType.includes("text")) return "string";
+  if (colType.includes("bool")) return "boolean";
+  if (colType.includes("date") || colType.includes("time")) return "string";
+
   return "any";
 };

@@ -1,10 +1,7 @@
-import { bool, integer, text } from "../src/core";
-import { Use } from "../src/decorators/use";
-import { sync } from "../src/runtime/sync";
-import { select } from "../src/runtime/select";
 import { beforeAll, expect, test } from "bun:test";
-
-import { db } from "../src/runtime/db";
+import { bool, integer, select, text, Use } from "../src/orm";
+import { sync } from "../src/db/sync";
+import { db } from "../src/db/db";
 
 @Use()
 class TestSelect {

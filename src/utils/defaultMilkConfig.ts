@@ -1,4 +1,4 @@
-import type { MilkConfig } from "../types";
+import type { MilkConfig } from "../typeUtils";
 
 export const defaultMilkConfig: MilkConfig = {
   dbPath: "milk/milk.db",

@@ -19,11 +19,8 @@ export const loadModels = async () => {
     .readdirSync(modelsDir)
     .filter((file) => file.endsWith(".ts"));
 
-  console.log("Loading models from:", modelsDir);
-
   for (const file of files) {
     const fullPath = pathToFileURL(path.join(modelsDir, file)).href;
-    console.log("Importing:", fullPath);
     await import(fullPath);
   }
 };

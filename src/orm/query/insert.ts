@@ -1,7 +1,7 @@
-import { db } from "./db";
-import { getModel, getSchema } from "../core/modelRegistry";
-import type { TableName, TableRecord } from "../types/tableMap";
-import type { InsertInput } from "../types";
+import { db } from "../../db/db";
+import { getModel, getSchema } from "../schema/modelRegistry";
+import type { TableName, TableRecord } from "../../types/tableMap";
+import type { InsertInput } from "../../typeUtils";
 
 export const insert = async <T extends TableName>(
   tableName: T,
@@ -13,7 +13,11 @@ export const insert = async <T extends TableName>(
   const schema = getSchema(model.instance);
   const keys = Object.keys(schema);
 
-  const fields = keys.filter((key) => key in data);
+  const fields = keys.filter((key) => {
+    const col = schema[key];
+    return key in data && !col?.options.autoIncrement && col?.options.primary;
+  });
+
   const values = fields.map((key) => {
     const value = data[key as keyof TableRecord<T>];
     return value instanceof Date ? value.toISOString() : value;
@@ -24,7 +28,9 @@ export const insert = async <T extends TableName>(
 
   const sql = `INSERT INTO "${model.tableName}" (${quotedFields}) VALUES (${placeholders})`;
 
-  db.query(sql).run(
-    ...(values as (string | number | boolean | null | Uint8Array)[])
-  );
+  const stmt = db
+    .query(sql)
+    .run(...(values as (string | number | boolean | null | Uint8Array)[]));
+
+  return db.query("SELECT last_insert_rowid()").get();
 };

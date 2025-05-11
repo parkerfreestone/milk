@@ -1,7 +1,5 @@
-import { Column } from "../src/core";
-import { getModel } from "../src/core/modelRegistry";
-import { Use } from "../src/decorators/use";
 import { expect, test } from "bun:test";
+import { Column, getModel, Use } from "../src/orm";
 
 @Use()
 class UserTest {

@@ -1,7 +1,7 @@
 import { existsSync } from "fs";
 import path from "path";
 import { defaultMilkConfig } from "../utils/defaultMilkConfig";
-import type { MilkConfig } from "../types";
+import type { MilkConfig } from "../typeUtils";
 
 let userConfig: Partial<MilkConfig> = {};
 try {

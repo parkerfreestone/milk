@@ -1,4 +1,4 @@
-import { getAllModels, getSchema } from "../core/modelRegistry";
+import { getAllModels, getSchema } from "../orm/schema/modelRegistry";
 import { config } from "./config";
 import { db } from "./db";
 

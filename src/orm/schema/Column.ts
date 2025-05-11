@@ -1,4 +1,4 @@
-import type { CommonColumnOptions } from "../types";
+import type { CommonColumnOptions } from "../../typeUtils";
 
 export class Column {
   constructor(

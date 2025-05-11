@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { Column } from "../src/core";
+import { Column } from "../src/orm";
 
 test("[Column] -- with unique constraint", () => {
   const col = new Column("TEXT", { unique: true });

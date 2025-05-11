@@ -2,7 +2,7 @@
 
 import { generateTypes } from "./cli/generate-types";
 import { init } from "./cli/init";
-import { loadModels } from "./runtime/loadModels";
+import { loadModels } from "./orm/schema/loadModels";
 
 await loadModels();
 
