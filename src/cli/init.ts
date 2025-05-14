@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export async function init() {
-  const templateRoot = path.resolve(__dirname, "../../templates/init");
+  const templateRoot = path.resolve(__dirname, "../../../templates/init");
   const projectRoot = process.cwd();
 
   const configSrc = path.join(templateRoot, "milk.config.template.ts");
