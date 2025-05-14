@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs";
 import { pathToFileURL } from "url";
-import { warn } from "../../utils/log";
+import { log, warn } from "../../utils/log";
 
 let loaded = false;
 
@@ -9,7 +9,7 @@ export const loadModels = async () => {
   if (loaded) return;
   loaded = true;
 
-  const modelsDir = path.resolve("milk/models");
+  const modelsDir = path.join(process.cwd(), "milk/models");
 
   if (!fs.existsSync(modelsDir)) {
     warn("No models directory found at milk/models");
@@ -21,7 +21,14 @@ export const loadModels = async () => {
     .filter((file) => file.endsWith(".ts"));
 
   for (const file of files) {
-    const fullPath = pathToFileURL(path.join(modelsDir, file)).href;
-    await import(fullPath);
+    const fullPath = path.join(modelsDir, file);
+    const url = pathToFileURL(fullPath).href;
+
+    try {
+      log("Imoprting model file:", fullPath);
+      await import(url);
+    } catch (err: any) {
+      warn(`Failed to improt model: ${err.message}`);
+    }
   }
 };
