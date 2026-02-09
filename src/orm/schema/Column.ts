@@ -28,8 +28,13 @@ export class Column {
   }
 }
 
+const SQL_KEYWORDS = [
+  "CURRENT_TIMESTAMP",
+  "CURRENT_DATE",
+  "CURRENT_TIME",
+  "NULL",
+];
+
 const isSqlKeyword = (val: string) => {
-  return ["CURRENT_TIMESTAMP", "NOW()", "DATE()", "TIME()", "uuid()"].includes(
-    val.toUpperCase()
-  );
+  return SQL_KEYWORDS.includes(val.toUpperCase());
 };

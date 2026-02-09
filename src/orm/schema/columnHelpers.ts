@@ -24,7 +24,7 @@ export const bool = (opts: BoolOptions = {}) => {
 };
 
 export const uuid = (opts: UuidOptions = {}) => {
-  return new Column("TEXT", { default: "uuid()", ...opts });
+  return new Column("TEXT", { ...opts, _isUuid: true } as any);
 };
 
 export const date = (opts: DateOptions) => {

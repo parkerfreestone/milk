@@ -12,6 +12,16 @@
       "import": "./build/index.js",
       "require": "./build/index.js",
       "types": "./build/index.d.ts"
+    },
+    "./core": {
+      "import": "./build/orm/schema/columnHelpers.js",
+      "require": "./build/orm/schema/columnHelpers.js",
+      "types": "./build/orm/schema/columnHelpers.d.ts"
+    },
+    "./runtime": {
+      "import": "./build/orm/query/select.js",
+      "require": "./build/orm/query/select.js",
+      "types": "./build/orm/query/select.d.ts"
     }
   },
   "files": [

@@ -3,6 +3,7 @@ import fs from "fs";
 import path from "path";
 import type { Column } from "../orm";
 import { log, warn } from "../utils/log";
+import { getTableName } from "../utils/tableName";
 
 export const generateTypes = async () => {
   const lines: string[] = [];
@@ -18,6 +19,7 @@ export const generateTypes = async () => {
 
   for (const [, meta] of models) {
     const { tableName, instance } = meta;
+    const finalTableName = getTableName(tableName);
     const schema = getSchema(instance);
 
     const fields = Object.entries(schema)
@@ -27,7 +29,7 @@ export const generateTypes = async () => {
       })
       .join("\n");
 
-    lines.push(`  "${tableName}": {\n${fields}\n };`);
+    lines.push(`  "${finalTableName}": {\n${fields}\n  };`);
   }
 
   lines.push("};\n");
@@ -43,7 +45,7 @@ const sqlTypeToTs = (col: Column): string => {
   const opts = col.options;
 
   if (opts.primary && opts.autoIncrement) return "number";
-  if (opts.primary && opts.default === "uuid()") return "string";
+  if (opts._isUuid) return "string";
 
   if (colType.includes("int")) return "number";
   if (colType.includes("char") || colType.includes("text")) return "string";

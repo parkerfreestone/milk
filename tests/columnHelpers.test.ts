@@ -27,9 +27,10 @@ test("[bool()] -- with default false", () => {
   expect(col.toSQL("done")).toBe('"done" BOOLEAN DEFAULT false');
 });
 
-test("[uuid()] -- uses TEXT with uuid() default", () => {
+test("[uuid()] -- uses TEXT type (UUID generated at insert time)", () => {
   const col = uuid();
-  expect(col.toSQL("userId")).toBe(`"userId" TEXT DEFAULT 'uuid()'`);
+  expect(col.toSQL("userId")).toBe(`"userId" TEXT`);
+  expect(col.options._isUuid).toBe(true);
 });
 
 test("[timestamped()] -- uses CURRENT_TIMESTAMP default", () => {

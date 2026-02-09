@@ -15,6 +15,7 @@ export type CommonColumnOptions = {
   nullable?: boolean;
   primary?: boolean;
   unique?: boolean;
+  _isUuid?: boolean;
 };
 
 export type ModelMetadata = {

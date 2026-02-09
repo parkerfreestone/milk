@@ -25,10 +25,10 @@ export const loadModels = async () => {
     const url = pathToFileURL(fullPath).href;
 
     try {
-      log("Imoprting model file:", fullPath);
+      log("Importing model file:", fullPath);
       await import(url);
     } catch (err: any) {
-      warn(`Failed to improt model: ${err.message}`);
+      warn(`Failed to import model: ${err.message}`);
     }
   }
 };

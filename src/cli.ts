@@ -6,8 +6,6 @@ import { log } from "./utils/log";
 import { init } from "./cli/init";
 import { sync } from "./cli/sync";
 
-await loadModels();
-
 const command = process.argv[2];
 
 switch (command) {
@@ -15,12 +13,14 @@ switch (command) {
     await init();
     break;
   case "sync":
+    await loadModels();
     await sync();
     break;
   case "gen-types":
+    await loadModels();
     await generateTypes();
     break;
   default:
     log(`Unknown command: ${command}`);
-    log("Try milk init");
+    log("Available commands: init, sync, gen-types");
 }

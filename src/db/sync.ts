@@ -1,5 +1,6 @@
 import { getAllModels, getSchema } from "../orm/schema/modelRegistry";
 import { log } from "../utils/log";
+import { getTableName } from "../utils/tableName";
 import { config } from "./config";
 import { db } from "./db";
 
@@ -12,9 +13,9 @@ export const sync = async () => {
       col.toSQL(name)
     );
 
-    const finalTableName = config.pluralize ? tableName + "s" : tableName;
+    const finalTableName = getTableName(tableName);
 
-    const sql = `CREATE TABLE IF NOT EXISTS ${finalTableName} (${columns.join(
+    const sql = `CREATE TABLE IF NOT EXISTS "${finalTableName}" (${columns.join(
       ", "
     )})`;
 

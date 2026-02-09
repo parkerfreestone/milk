@@ -1,6 +1,7 @@
 import { db } from "../../db/db";
 import type { OrderByDirection } from "../../typeUtils";
 import { info } from "../../utils/log";
+import { getTableName } from "../../utils/tableName";
 
 export class QueryBuilder<T extends Record<string, any> = any> {
   private filters: [string, any][] = [];
@@ -21,7 +22,8 @@ export class QueryBuilder<T extends Record<string, any> = any> {
     const fields =
       this.selectedFields?.map((field) => `"${String(field)}"`).join(", ") ||
       "*";
-    let sql = `SELECT ${fields} FROM ${this.tableName}`;
+    const finalTableName = getTableName(this.tableName);
+    let sql = `SELECT ${fields} FROM "${finalTableName}"`;
     const values: any[] = [];
 
     if (this.filters.length > 0) {
@@ -45,7 +47,7 @@ export class QueryBuilder<T extends Record<string, any> = any> {
     return [sql, values];
   }
 
-  async where(conditions: Record<string, any>) {
+  where(conditions: Record<string, any>) {
     for (const [key, value] of Object.entries(conditions)) {
       this.filter(key, value);
     }
@@ -64,8 +66,11 @@ export class QueryBuilder<T extends Record<string, any> = any> {
   }
 
   async first() {
+    if (this.limitCount === undefined) {
+      this.limitCount = 1;
+    }
     const [sql, values] = this.buildSql();
-    return db.query(sql + " LIMIT 1").get(...values);
+    return db.query(sql).get(...values);
   }
 
   limit(n: number) {
