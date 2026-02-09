@@ -33,6 +33,8 @@ bunx @lactose/milk-orm gen-types  # Generate milk.d.ts type definitions
 - `schema/loadModels.ts` - Dynamic model loader that scans `milk/models/`
 - `query/QueryBuilder.ts` - SELECT query builder with chainable methods
 - `query/insert.ts` - Type-safe INSERT operations
+- `query/update.ts` - UPDATE operations with safety checks
+- `query/remove.ts` - DELETE operations with safety checks
 
 **Database Layer (`/src/db/`)**
 - `db.ts` - Singleton SQLite database instance (uses `bun:sqlite`)
@@ -64,7 +66,11 @@ export class Task {
 Query chaining:
 ```typescript
 select("Task").where({ is_done: false }).orderBy("order", "asc").limit(10).all();
+update("Task").set({ is_done: true }).where({ id: 1 }).run();
+remove("Task").where({ id: 1 }).run();
 ```
+
+Safety: `update()` and `remove()` require `.where()` or explicit `.all()` to prevent accidental mass operations.
 
 ### Configuration
 
@@ -85,4 +91,4 @@ Default config in `src/utils/defaultMilkConfig.ts`:
 
 ## Roadmap
 
-Not yet implemented: `update()`, `remove()`, migrations, schema-aware validation.
+Not yet implemented: `@Use()` plugins, migrations, schema-aware validation.

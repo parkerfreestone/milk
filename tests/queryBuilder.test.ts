@@ -29,9 +29,9 @@ test("[select] - all returns all rows", async () => {
   expect(rows.length).toBe(3);
 });
 
-test("[select] - filter returns correct rows", async () => {
+test("[select] - where returns correct rows", async () => {
   const rows: any[] = await select("TestSelect" as any)
-    .filter("done", false)
+    .where({ done: false })
     .all();
   expect(rows.length).toBe(2);
   expect(rows[0].done).toBe(0);
@@ -79,7 +79,7 @@ test("[select] - runs all() automatically", async () => {
 test("[select] - columns returns only selected fields", async () => {
   const rows = await select("TestSelect" as any)
     .columns(["title"])
-    .filter("done", false)
+    .where({ done: false })
     .all();
 
   expect(rows.length).toBeGreaterThan(0);
