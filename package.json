@@ -1,6 +1,10 @@
 {
   "name": "@lactose/milk-orm",
   "version": "0.3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/parkerfreestone/milk-orm"
+  },
   "scripts": {
     "build": "bun build ./src/index.ts ./src/cli.ts --outdir build --target bun && tsc"
   },
