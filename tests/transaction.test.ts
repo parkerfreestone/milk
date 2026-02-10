@@ -1,8 +1,8 @@
-import { beforeAll, beforeEach, expect, test, describe } from "bun:test";
-import { identifier, insert, select, text, Use } from "../src/orm";
+import { beforeAll, beforeEach, describe, expect, test } from "bun:test";
 import { transaction } from "../src/db";
-import { sync } from "../src/db/sync";
 import { db } from "../src/db/db";
+import { sync } from "../src/db/sync";
+import { identifier, insert, select, text, Use } from "../src/orm";
 
 @Use()
 class TxTest {
@@ -56,7 +56,7 @@ describe("transaction", () => {
     await expect(
       transaction(async () => {
         throw new Error("Test error");
-      })
+      }),
     ).rejects.toThrow("Test error");
   });
 

@@ -1,8 +1,8 @@
 import { db } from "../../db/db";
-import { getModel } from "../schema/modelRegistry";
 import type { TableName } from "../../types/tableMap";
 import { log } from "../../utils/log";
 import { getTableName } from "../../utils/tableName";
+import { getModel } from "../schema/modelRegistry";
 
 export class DeleteBuilder<T extends TableName> {
   private filters: [string, any][] = [];
@@ -28,7 +28,7 @@ export class DeleteBuilder<T extends TableName> {
   run() {
     if (this.filters.length === 0 && !this.deleteAll) {
       throw new Error(
-        "remove() requires .where() or explicit .all() to prevent accidental mass deletion"
+        "remove() requires .where() or explicit .all() to prevent accidental mass deletion",
       );
     }
 

@@ -1,7 +1,6 @@
-import { db } from "../db";
 import { getAllModels, getSchema } from "../../orm/schema/modelRegistry";
 import { getTableName } from "../../utils/tableName";
-import { Column } from "../../orm/schema/Column";
+import { db } from "../db";
 
 export type DbColumnInfo = {
   cid: number;
@@ -36,9 +35,10 @@ export type ModelTableSchema = {
 
 export const getDbTables = (): string[] => {
   const tables = db
-    .query<{ name: string }, []>(
-      `SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' AND name NOT LIKE '_milk_%'`
-    )
+    .query<
+      { name: string },
+      []
+    >(`SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' AND name NOT LIKE '_milk_%'`)
     .all();
   return tables.map((t) => t.name);
 };
@@ -79,7 +79,7 @@ export const getModelSchema = (): Map<string, ModelTableSchema> => {
           nullable: col.options.nullable,
           default: col.options.default,
         },
-      })
+      }),
     );
 
     schema.set(finalTableName, { tableName: finalTableName, columns });

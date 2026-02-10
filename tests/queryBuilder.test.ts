@@ -1,7 +1,7 @@
 import { beforeAll, expect, test } from "bun:test";
-import { bool, integer, select, text, Use } from "../src/orm";
-import { sync } from "../src/db/sync";
 import { db } from "../src/db/db";
+import { sync } from "../src/db/sync";
+import { bool, integer, select, text, Use } from "../src/orm";
 
 @Use()
 class TestSelect {
@@ -16,7 +16,7 @@ beforeAll(() => {
   db.run(`DELETE FROM "TestSelect"`);
 
   const stmt = db.prepare(
-    `INSERT INTO "TestSelect" ("title", "done", "order") VALUES (?, ?, ?)`
+    `INSERT INTO "TestSelect" ("title", "done", "order") VALUES (?, ?, ?)`,
   );
 
   stmt.run("A", false, 1);

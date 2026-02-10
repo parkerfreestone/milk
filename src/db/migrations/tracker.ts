@@ -23,18 +23,20 @@ export const ensureMigrationTable = (): void => {
 export const getAppliedMigrations = (): MigrationRecord[] => {
   ensureMigrationTable();
   return db
-    .query<MigrationRecord, []>(
-      `SELECT id, name, batch, executed_at FROM "${MIGRATION_TABLE}" ORDER BY id ASC`
-    )
+    .query<
+      MigrationRecord,
+      []
+    >(`SELECT id, name, batch, executed_at FROM "${MIGRATION_TABLE}" ORDER BY id ASC`)
     .all();
 };
 
 export const getLastBatch = (): number => {
   ensureMigrationTable();
   const result = db
-    .query<{ batch: number | null }, []>(
-      `SELECT MAX(batch) as batch FROM "${MIGRATION_TABLE}"`
-    )
+    .query<
+      { batch: number | null },
+      []
+    >(`SELECT MAX(batch) as batch FROM "${MIGRATION_TABLE}"`)
     .get();
   return result?.batch ?? 0;
 };
@@ -42,18 +44,19 @@ export const getLastBatch = (): number => {
 export const getMigrationsInBatch = (batch: number): MigrationRecord[] => {
   ensureMigrationTable();
   return db
-    .query<MigrationRecord, [number]>(
-      `SELECT id, name, batch, executed_at FROM "${MIGRATION_TABLE}" WHERE batch = ? ORDER BY id DESC`
-    )
+    .query<
+      MigrationRecord,
+      [number]
+    >(`SELECT id, name, batch, executed_at FROM "${MIGRATION_TABLE}" WHERE batch = ? ORDER BY id DESC`)
     .all(batch);
 };
 
 export const recordMigration = (name: string, batch: number): void => {
   ensureMigrationTable();
-  db.run(
-    `INSERT INTO "${MIGRATION_TABLE}" (name, batch) VALUES (?, ?)`,
-    [name, batch]
-  );
+  db.run(`INSERT INTO "${MIGRATION_TABLE}" (name, batch) VALUES (?, ?)`, [
+    name,
+    batch,
+  ]);
 };
 
 export const removeMigration = (name: string): void => {

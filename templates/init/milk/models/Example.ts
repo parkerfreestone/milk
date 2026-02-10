@@ -1,5 +1,5 @@
 import { Use } from "@lactose/milk-orm";
-import { identifier, text, bool, timestamped } from "@lactose/milk-orm/core";
+import { bool, identifier, text, timestamped } from "@lactose/milk-orm/core";
 
 @Use()
 export class Example {

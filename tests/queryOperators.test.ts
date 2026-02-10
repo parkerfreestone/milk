@@ -1,7 +1,7 @@
-import { beforeAll, beforeEach, expect, test, describe } from "bun:test";
-import { identifier, integer, select, text, Use } from "../src/orm";
-import { sync } from "../src/db/sync";
+import { beforeAll, beforeEach, describe, expect, test } from "bun:test";
 import { db } from "../src/db/db";
+import { sync } from "../src/db/sync";
+import { identifier, integer, select, text, Use } from "../src/orm";
 
 @Use()
 class QueryOpTest {
@@ -19,18 +19,20 @@ beforeEach(() => {
   db.run(`DELETE FROM "QueryOpTest"`);
   // Insert test data
   db.run(
-    `INSERT INTO "QueryOpTest" (name, age, status) VALUES ('Alice', 25, 'active')`
+    `INSERT INTO "QueryOpTest" (name, age, status) VALUES ('Alice', 25, 'active')`,
   );
   db.run(
-    `INSERT INTO "QueryOpTest" (name, age, status) VALUES ('Bob', 30, 'active')`
+    `INSERT INTO "QueryOpTest" (name, age, status) VALUES ('Bob', 30, 'active')`,
   );
   db.run(
-    `INSERT INTO "QueryOpTest" (name, age, status) VALUES ('Charlie', 35, 'inactive')`
+    `INSERT INTO "QueryOpTest" (name, age, status) VALUES ('Charlie', 35, 'inactive')`,
   );
   db.run(
-    `INSERT INTO "QueryOpTest" (name, age, status) VALUES ('Diana', 40, 'pending')`
+    `INSERT INTO "QueryOpTest" (name, age, status) VALUES ('Diana', 40, 'pending')`,
   );
-  db.run(`INSERT INTO "QueryOpTest" (name, age, status) VALUES ('Eve', 22, NULL)`);
+  db.run(
+    `INSERT INTO "QueryOpTest" (name, age, status) VALUES ('Eve', 22, NULL)`,
+  );
 });
 
 describe("comparison operators", () => {
@@ -78,22 +80,30 @@ describe("comparison operators", () => {
   });
 
   test("whereGt helper", async () => {
-    const rows = await select("QueryOpTest" as any).whereGt("age", 30).all();
+    const rows = await select("QueryOpTest" as any)
+      .whereGt("age", 30)
+      .all();
     expect(rows.length).toBe(2);
   });
 
   test("whereGte helper", async () => {
-    const rows = await select("QueryOpTest" as any).whereGte("age", 30).all();
+    const rows = await select("QueryOpTest" as any)
+      .whereGte("age", 30)
+      .all();
     expect(rows.length).toBe(3);
   });
 
   test("whereLt helper", async () => {
-    const rows = await select("QueryOpTest" as any).whereLt("age", 25).all();
+    const rows = await select("QueryOpTest" as any)
+      .whereLt("age", 25)
+      .all();
     expect(rows.length).toBe(1);
   });
 
   test("whereLte helper", async () => {
-    const rows = await select("QueryOpTest" as any).whereLte("age", 25).all();
+    const rows = await select("QueryOpTest" as any)
+      .whereLte("age", 25)
+      .all();
     expect(rows.length).toBe(2);
   });
 });
@@ -146,7 +156,9 @@ describe("LIKE operator", () => {
 
 describe("NULL operators", () => {
   test("whereNull", async () => {
-    const rows = await select("QueryOpTest" as any).whereNull("status").all();
+    const rows = await select("QueryOpTest" as any)
+      .whereNull("status")
+      .all();
     expect(rows.length).toBe(1); // Eve
     expect((rows[0] as any).name).toBe("Eve");
   });

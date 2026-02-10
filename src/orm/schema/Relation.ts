@@ -5,6 +5,6 @@ export class Relation {
     public type: RelationType,
     public getTarget: () => any,
     public foreignKey?: string,
-    public localKey: string = "id"
+    public localKey: string = "id",
   ) {}
 }

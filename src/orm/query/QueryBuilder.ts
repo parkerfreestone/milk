@@ -28,7 +28,7 @@ export class QueryBuilder<T extends Record<string, any> = any> {
     field: string,
     operator: Operator,
     value: any,
-    connector: "AND" | "OR" = "AND"
+    connector: "AND" | "OR" = "AND",
   ) {
     this.filters.push({ field, operator, value, connector });
     return this;
@@ -99,7 +99,7 @@ export class QueryBuilder<T extends Record<string, any> = any> {
   where(
     fieldOrConditions: string | Record<string, any>,
     operator?: Operator,
-    value?: any
+    value?: any,
   ): this {
     if (typeof fieldOrConditions === "string") {
       return this.addFilter(fieldOrConditions, operator!, value, "AND");
@@ -123,7 +123,7 @@ export class QueryBuilder<T extends Record<string, any> = any> {
   orWhere(
     fieldOrConditions: string | Record<string, any>,
     operator?: Operator,
-    value?: any
+    value?: any,
   ): this {
     if (typeof fieldOrConditions === "string") {
       return this.addFilter(fieldOrConditions, operator!, value, "OR");
@@ -279,7 +279,7 @@ export class QueryBuilder<T extends Record<string, any> = any> {
       const relation = relations[relationName];
       if (!relation) {
         throw new Error(
-          `Relation "${relationName}" not found on model "${this.tableName}"`
+          `Relation "${relationName}" not found on model "${this.tableName}"`,
         );
       }
 
@@ -292,7 +292,7 @@ export class QueryBuilder<T extends Record<string, any> = any> {
   private async loadRelation(
     rows: any[],
     relationName: string,
-    relation: Relation
+    relation: Relation,
   ): Promise<void> {
     const targetClass = relation.getTarget();
     const targetModelName = targetClass.name;
@@ -306,12 +306,7 @@ export class QueryBuilder<T extends Record<string, any> = any> {
 
     switch (relation.type) {
       case "belongsTo":
-        await this.loadBelongsTo(
-          rows,
-          relationName,
-          relation,
-          targetTableName
-        );
+        await this.loadBelongsTo(rows, relationName, relation, targetTableName);
         break;
       case "hasMany":
         await this.loadHasMany(rows, relationName, relation, targetTableName);
@@ -326,17 +321,21 @@ export class QueryBuilder<T extends Record<string, any> = any> {
     rows: any[],
     relationName: string,
     relation: Relation,
-    targetTableName: string
+    targetTableName: string,
   ): Promise<void> {
     // Foreign key is on this model
     const targetClass = relation.getTarget();
     const foreignKey =
       relation.foreignKey ||
-      targetClass.name.charAt(0).toLowerCase() + targetClass.name.slice(1) + "Id";
+      targetClass.name.charAt(0).toLowerCase() +
+        targetClass.name.slice(1) +
+        "Id";
     const localKey = relation.localKey;
 
     // Collect unique foreign key values
-    const fkValues = [...new Set(rows.map((r) => r[foreignKey]).filter(Boolean))];
+    const fkValues = [
+      ...new Set(rows.map((r) => r[foreignKey]).filter(Boolean)),
+    ];
     if (fkValues.length === 0) {
       rows.forEach((r) => (r[relationName] = null));
       return;
@@ -362,7 +361,7 @@ export class QueryBuilder<T extends Record<string, any> = any> {
     rows: any[],
     relationName: string,
     relation: Relation,
-    targetTableName: string
+    targetTableName: string,
   ): Promise<void> {
     // Foreign key is on target model
     const foreignKey =
@@ -401,7 +400,7 @@ export class QueryBuilder<T extends Record<string, any> = any> {
     rows: any[],
     relationName: string,
     relation: Relation,
-    targetTableName: string
+    targetTableName: string,
   ): Promise<void> {
     // Foreign key is on target model (like hasMany but returns single)
     const foreignKey =

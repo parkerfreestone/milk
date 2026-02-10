@@ -1,8 +1,8 @@
 import { db } from "../../db/db";
-import { getModel, getSchema } from "../schema/modelRegistry";
 import type { TableName, TableRecord } from "../../types/tableMap";
 import { log } from "../../utils/log";
 import { getTableName } from "../../utils/tableName";
+import { getModel, getSchema } from "../schema/modelRegistry";
 
 export class UpdateBuilder<T extends TableName> {
   private setData: Partial<TableRecord<T>> | null = null;
@@ -38,7 +38,7 @@ export class UpdateBuilder<T extends TableName> {
 
     if (this.filters.length === 0 && !this.updateAll) {
       throw new Error(
-        "update() requires .where() or explicit .all() to prevent accidental mass updates"
+        "update() requires .where() or explicit .all() to prevent accidental mass updates",
       );
     }
 
@@ -57,7 +57,7 @@ export class UpdateBuilder<T extends TableName> {
 
     const setClauses = setEntries.map(([key]) => `"${key}" = ?`).join(", ");
     const setValues = setEntries.map(([, value]) =>
-      value instanceof Date ? value.toISOString() : value
+      value instanceof Date ? value.toISOString() : value,
     );
 
     // Build WHERE clause

@@ -1,14 +1,14 @@
-import { Column } from "./Column";
-import { Relation } from "./Relation";
 import type { ModelMetadata } from "../../typeUtils";
 import { log } from "../../utils/log";
+import { Column } from "./Column";
+import { Relation } from "./Relation";
 
 const models = new Map<string, ModelMetadata>();
 
 export const registerModel = (
   className: string,
   instance: any,
-  tableName: string
+  tableName: string,
 ) => {
   log(`Model registered: ${className} -> ${tableName}`);
   models.set(className, { tableName, instance });

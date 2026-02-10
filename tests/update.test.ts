@@ -1,15 +1,7 @@
 import { beforeAll, beforeEach, expect, test } from "bun:test";
-import {
-  identifier,
-  insert,
-  select,
-  text,
-  bool,
-  update,
-  Use,
-} from "../src/orm";
-import { sync } from "../src/db/sync";
 import { db } from "../src/db/db";
+import { sync } from "../src/db/sync";
+import { bool, identifier, select, text, update, Use } from "../src/orm";
 
 @Use()
 class UpdateTest {
@@ -38,7 +30,9 @@ test("[update] - updates a single record with where", async () => {
 
   expect(result.changes).toBe(1);
 
-  const rows = await select("UpdateTest" as any).where({ name: "Alice" }).all();
+  const rows = await select("UpdateTest" as any)
+    .where({ name: "Alice" })
+    .all();
   expect((rows[0] as any).active).toBe(0); // SQLite stores bool as 0/1
 });
 
@@ -50,7 +44,9 @@ test("[update] - updates multiple records with where", async () => {
 
   expect(result.changes).toBe(2); // Alice and Bob
 
-  const rows = await select("UpdateTest" as any).where({ active: false }).all();
+  const rows = await select("UpdateTest" as any)
+    .where({ active: false })
+    .all();
   expect(rows.length).toBe(3); // All three now inactive
 });
 
@@ -64,13 +60,17 @@ test("[update] - updates all with explicit .all()", async () => {
 
 test("[update] - throws without where or all", () => {
   expect(() => {
-    update("UpdateTest" as any).set({ active: false }).run();
+    update("UpdateTest" as any)
+      .set({ active: false })
+      .run();
   }).toThrow("requires .where() or explicit .all()");
 });
 
 test("[update] - throws without set", () => {
   expect(() => {
-    update("UpdateTest" as any).where({ id: 1 }).run();
+    update("UpdateTest" as any)
+      .where({ id: 1 })
+      .run();
   }).toThrow("requires .set()");
 });
 
@@ -97,6 +97,8 @@ test("[update] - handles Date values", async () => {
     .where({ name: "Alice" })
     .run();
 
-  const rows = await select("UpdateTest" as any).where({ name: "Alice" }).all();
+  const rows = await select("UpdateTest" as any)
+    .where({ name: "Alice" })
+    .all();
   expect((rows[0] as any).updatedAt).toBe(now.toISOString());
 });

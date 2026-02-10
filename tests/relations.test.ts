@@ -1,4 +1,6 @@
-import { beforeAll, expect, test, describe } from "bun:test";
+import { beforeAll, describe, expect, test } from "bun:test";
+import { db } from "../src/db/db";
+import { sync } from "../src/db/sync";
 import {
   belongsTo,
   hasMany,
@@ -9,8 +11,6 @@ import {
   text,
   Use,
 } from "../src/orm";
-import { sync } from "../src/db/sync";
-import { db } from "../src/db/db";
 
 // Define test models with relations
 
@@ -57,29 +57,27 @@ beforeAll(() => {
   db.run(`DELETE FROM "AuthorProfile"`);
 
   // Insert test data
-  const insertAuthor = db.prepare(
-    `INSERT INTO "Author" ("name") VALUES (?)`
-  );
+  const insertAuthor = db.prepare(`INSERT INTO "Author" ("name") VALUES (?)`);
   insertAuthor.run("Alice");
   insertAuthor.run("Bob");
   insertAuthor.run("Charlie");
 
   const insertPost = db.prepare(
-    `INSERT INTO "Post" ("title", "authorId") VALUES (?, ?)`
+    `INSERT INTO "Post" ("title", "authorId") VALUES (?, ?)`,
   );
   insertPost.run("Alice Post 1", 1);
   insertPost.run("Alice Post 2", 1);
   insertPost.run("Bob Post 1", 2);
 
   const insertComment = db.prepare(
-    `INSERT INTO "Comment" ("body", "postId") VALUES (?, ?)`
+    `INSERT INTO "Comment" ("body", "postId") VALUES (?, ?)`,
   );
   insertComment.run("Great post!", 1);
   insertComment.run("Thanks!", 1);
   insertComment.run("Nice work", 2);
 
   const insertProfile = db.prepare(
-    `INSERT INTO "AuthorProfile" ("bio", "authorId") VALUES (?, ?)`
+    `INSERT INTO "AuthorProfile" ("bio", "authorId") VALUES (?, ?)`,
   );
   insertProfile.run("Alice is a writer", 1);
   insertProfile.run("Bob is a developer", 2);
@@ -87,7 +85,9 @@ beforeAll(() => {
 
 describe("belongsTo relation", () => {
   test("loads single related record", async () => {
-    const posts: any[] = await select("Post" as any).with("author").all();
+    const posts: any[] = await select("Post" as any)
+      .with("author")
+      .all();
 
     expect(posts.length).toBe(3);
     expect(posts[0].author).toBeDefined();
@@ -128,7 +128,9 @@ describe("belongsTo relation", () => {
 
 describe("hasMany relation", () => {
   test("loads multiple related records", async () => {
-    const authors: any[] = await select("Author" as any).with("posts").all();
+    const authors: any[] = await select("Author" as any)
+      .with("posts")
+      .all();
 
     expect(authors.length).toBe(3);
 
@@ -166,7 +168,9 @@ describe("hasMany relation", () => {
 
 describe("hasOne relation", () => {
   test("loads single related record", async () => {
-    const authors: any[] = await select("Author" as any).with("profile").all();
+    const authors: any[] = await select("Author" as any)
+      .with("profile")
+      .all();
 
     const alice = authors.find((a) => a.name === "Alice");
     expect(alice.profile).toBeDefined();
@@ -216,7 +220,7 @@ describe("error handling", () => {
     expect(
       select("Author" as any)
         .with("unknownRelation")
-        .all()
+        .all(),
     ).rejects.toThrow('Relation "unknownRelation" not found on model "Author"');
   });
 });

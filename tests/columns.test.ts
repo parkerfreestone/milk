@@ -35,6 +35,6 @@ test("[Column] -- with all combined options", () => {
   });
 
   expect(col.toSQL("username")).toBe(
-    `"username" VARCHAR(255) PRIMARY KEY UNIQUE NOT NULL DEFAULT 'guest'`
+    `"username" VARCHAR(255) PRIMARY KEY UNIQUE NOT NULL DEFAULT 'guest'`,
   );
 });

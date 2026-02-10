@@ -1,14 +1,14 @@
 #!/usr/bin/env bun
 
-import { loadModels } from "./orm/schema/loadModels";
 import { generateTypes } from "./cli/generate-types";
-import { log } from "./utils/log";
 import { init } from "./cli/init";
-import { sync } from "./cli/sync";
 import { migrateGenerate } from "./cli/migrate-generate";
-import { migrateRun } from "./cli/migrate-run";
 import { migrateRollback } from "./cli/migrate-rollback";
+import { migrateRun } from "./cli/migrate-run";
 import { migrateStatus } from "./cli/migrate-status";
+import { sync } from "./cli/sync";
+import { loadModels } from "./orm/schema/loadModels";
+import { log } from "./utils/log";
 
 const command = process.argv[2];
 const args = process.argv.slice(3);
@@ -41,5 +41,7 @@ switch (command) {
     break;
   default:
     log(`Unknown command: ${command}`);
-    log("Available commands: init, sync, gen-types, migrate:generate, migrate:run, migrate:rollback, migrate:status");
+    log(
+      "Available commands: init, sync, gen-types, migrate:generate, migrate:run, migrate:rollback, migrate:status",
+    );
 }

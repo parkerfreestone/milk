@@ -1,6 +1,6 @@
-import { registerModel } from "./modelRegistry";
 import { config } from "../../db/config";
 import type { MilkConfig } from "../../typeUtils";
+import { registerModel } from "./modelRegistry";
 
 export const Use = () => {
   return (target: any) => {
@@ -14,7 +14,7 @@ export const Use = () => {
 
 const formatTableName = (
   name: string,
-  tableCase: MilkConfig["tableCase"]
+  tableCase: MilkConfig["tableCase"],
 ): string => {
   switch (tableCase) {
     case "uppercase":

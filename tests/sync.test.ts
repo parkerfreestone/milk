@@ -1,8 +1,8 @@
-import { beforeAll, beforeEach, expect, test } from "bun:test";
-import { identifier, text, Use } from "../src/orm";
-import { sync } from "../src/db/sync";
-import { db } from "../src/db/db";
+import { beforeEach, expect, test } from "bun:test";
 import { config } from "../src/db/config";
+import { db } from "../src/db/db";
+import { sync } from "../src/db/sync";
+import { identifier, text, Use } from "../src/orm";
 
 @Use()
 class SyncTest {
@@ -21,7 +21,7 @@ test("[sync] - creates tables without error", async () => {
     .query<{ name: string }, []>(
       `
         SELECT name FROM sqlite_master WHERE type='table' AND name='SyncTest'
-      `
+      `,
     )
     .get();
 
@@ -42,7 +42,7 @@ test("[sync] - respects pluralize config", async () => {
     .query<{ name: string }, []>(
       `
     SELECT name FROM sqlite_master WHERE type='table' AND name='SyncTests'
-  `
+  `,
     )
     .get();
 

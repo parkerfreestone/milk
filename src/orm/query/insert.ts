@@ -1,9 +1,9 @@
 import { db } from "../../db/db";
-import { getModel, getSchema } from "../schema/modelRegistry";
 import type { TableName, TableRecord } from "../../types/tableMap";
 import type { InsertInput } from "../../typeUtils";
 import { log } from "../../utils/log";
 import { getTableName } from "../../utils/tableName";
+import { getModel, getSchema } from "../schema/modelRegistry";
 
 const generateUuid = () => {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
@@ -15,7 +15,7 @@ const generateUuid = () => {
 
 export const insert = async <T extends TableName>(
   tableName: T,
-  data: InsertInput<TableRecord<T>>
+  data: InsertInput<TableRecord<T>>,
 ) => {
   const model = getModel(tableName);
   if (!model) throw new Error(`Model "${tableName}" not found.`);
@@ -48,7 +48,7 @@ export const insert = async <T extends TableName>(
   const sql = `INSERT INTO "${finalTableName}" (${quotedFields}) VALUES (${placeholders})`;
 
   db.query(sql).run(
-    ...(values as (string | number | boolean | null | Uint8Array)[])
+    ...(values as (string | number | boolean | null | Uint8Array)[]),
   );
 
   log(`INSERT INTO ${finalTableName}`, values);

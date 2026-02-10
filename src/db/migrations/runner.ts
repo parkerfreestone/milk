@@ -1,5 +1,8 @@
 import fs from "fs";
 import path from "path";
+import { log } from "../../utils/log";
+import { config } from "../config";
+import { db } from "../db";
 import {
   ensureMigrationTable,
   getAppliedMigrations,
@@ -9,9 +12,6 @@ import {
   removeMigration,
   type MigrationRecord,
 } from "./tracker";
-import { config } from "../config";
-import { db } from "../db";
-import { log } from "../../utils/log";
 
 export type Migration = {
   name: string;
@@ -106,7 +106,9 @@ export const runMigrations = async (): Promise<number> => {
   return count;
 };
 
-export const rollbackMigrations = async (steps: number = 1): Promise<number> => {
+export const rollbackMigrations = async (
+  steps: number = 1,
+): Promise<number> => {
   ensureMigrationTable();
 
   const lastBatch = getLastBatch();

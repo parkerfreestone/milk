@@ -36,6 +36,6 @@ test("[uuid()] -- uses TEXT type (UUID generated at insert time)", () => {
 test("[timestamped()] -- uses CURRENT_TIMESTAMP default", () => {
   const col = timestamped();
   expect(col.toSQL("createdAt")).toBe(
-    `"createdAt" DATETIME DEFAULT CURRENT_TIMESTAMP`
+    `"createdAt" DATETIME DEFAULT CURRENT_TIMESTAMP`,
   );
 });

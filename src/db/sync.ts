@@ -10,13 +10,13 @@ export const sync = async () => {
     const schema = getSchema(instance);
 
     const columns = Object.entries(schema).map(([name, col]) =>
-      col.toSQL(name)
+      col.toSQL(name),
     );
 
     const finalTableName = getTableName(tableName);
 
     const sql = `CREATE TABLE IF NOT EXISTS "${finalTableName}" (${columns.join(
-      ", "
+      ", ",
     )})`;
 
     if (config.log) log(`${sql}`);

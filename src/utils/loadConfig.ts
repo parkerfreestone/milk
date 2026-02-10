@@ -1,6 +1,6 @@
+import path from "path";
 import type { MilkConfig } from "../typeUtils";
 import { defaultMilkConfig } from "./defaultMilkConfig";
-import path from "path";
 
 export const loadConfig = async (): Promise<MilkConfig> => {
   try {

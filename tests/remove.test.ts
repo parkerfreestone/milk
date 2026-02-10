@@ -1,7 +1,7 @@
 import { beforeAll, beforeEach, expect, test } from "bun:test";
-import { identifier, select, text, bool, remove, Use } from "../src/orm";
-import { sync } from "../src/db/sync";
 import { db } from "../src/db/db";
+import { sync } from "../src/db/sync";
+import { bool, identifier, remove, select, text, Use } from "../src/orm";
 
 @Use()
 class RemoveTest {
@@ -23,7 +23,9 @@ beforeEach(() => {
 });
 
 test("[remove] - deletes a single record with where", async () => {
-  const result = remove("RemoveTest" as any).where({ name: "Alice" }).run();
+  const result = remove("RemoveTest" as any)
+    .where({ name: "Alice" })
+    .run();
 
   expect(result.changes).toBe(1);
 
@@ -33,7 +35,9 @@ test("[remove] - deletes a single record with where", async () => {
 });
 
 test("[remove] - deletes multiple records with where", async () => {
-  const result = remove("RemoveTest" as any).where({ active: true }).run();
+  const result = remove("RemoveTest" as any)
+    .where({ active: true })
+    .run();
 
   expect(result.changes).toBe(2); // Alice and Bob
 
@@ -59,7 +63,9 @@ test("[remove] - throws without where or all", () => {
 
 test("[remove] - throws for unknown model", () => {
   expect(() => {
-    remove("NonExistent" as any).where({ id: 1 }).run();
+    remove("NonExistent" as any)
+      .where({ id: 1 })
+      .run();
   }).toThrow('Model "NonExistent" not found');
 });
 

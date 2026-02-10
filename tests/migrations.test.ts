@@ -1,28 +1,28 @@
-import { beforeEach, afterEach, expect, test, describe } from "bun:test";
+import { afterEach, beforeEach, describe, expect, test } from "bun:test";
 import fs from "fs";
 import path from "path";
+import { config } from "../src/db/config";
 import { db } from "../src/db/db";
-import { identifier, text, integer, Use } from "../src/orm";
+import { diffSchemas, type SchemaDiff } from "../src/db/migrations/diff";
 import { generateMilkName, milkWords } from "../src/db/migrations/milkWords";
+import {
+  getMigrationStatus,
+  rollbackMigrations,
+  runMigrations,
+} from "../src/db/migrations/runner";
+import {
+  getDbSchema,
+  getDbTables,
+  getModelSchema,
+} from "../src/db/migrations/schema";
 import {
   ensureMigrationTable,
   getAppliedMigrations,
+  getLastBatch,
   recordMigration,
   removeMigration,
-  getLastBatch,
 } from "../src/db/migrations/tracker";
-import {
-  getDbSchema,
-  getModelSchema,
-  getDbTables,
-} from "../src/db/migrations/schema";
-import { diffSchemas, isDiffEmpty, type SchemaDiff } from "../src/db/migrations/diff";
-import {
-  runMigrations,
-  rollbackMigrations,
-  getMigrationStatus,
-} from "../src/db/migrations/runner";
-import { config } from "../src/db/config";
+import { identifier, text, Use } from "../src/orm";
 
 // Test model
 @Use()
@@ -86,9 +86,10 @@ describe("tracker", () => {
     ensureMigrationTable();
 
     const table = db
-      .query<{ name: string }, []>(
-        `SELECT name FROM sqlite_master WHERE type='table' AND name='_milk_migrations'`
-      )
+      .query<
+        { name: string },
+        []
+      >(`SELECT name FROM sqlite_master WHERE type='table' AND name='_milk_migrations'`)
       .get();
 
     expect(table?.name).toBe("_milk_migrations");
@@ -208,7 +209,9 @@ describe("diff", () => {
   });
 
   test("detects column to add", () => {
-    db.run(`CREATE TABLE "MigrationTestModel" (id INTEGER PRIMARY KEY AUTOINCREMENT)`);
+    db.run(
+      `CREATE TABLE "MigrationTestModel" (id INTEGER PRIMARY KEY AUTOINCREMENT)`,
+    );
 
     const modelSchema = getModelSchema();
     const dbSchema = getDbSchema();
@@ -235,7 +238,7 @@ describe("diff", () => {
 
     // Filter to only columns for MigrationTestModel
     const columnsToRemoveFromTestModel = diff.columnsToRemove.filter(
-      (c) => c.table === "MigrationTestModel"
+      (c) => c.table === "MigrationTestModel",
     );
 
     expect(columnsToRemoveFromTestModel.length).toBe(1);
@@ -259,7 +262,7 @@ describe("diff", () => {
     const relevantDiff: SchemaDiff = {
       ...diff,
       tablesToCreate: diff.tablesToCreate.filter(
-        (t) => t.tableName === "MigrationTestModel"
+        (t) => t.tableName === "MigrationTestModel",
       ),
     };
 
@@ -276,7 +279,7 @@ describe("runner", () => {
     fs.mkdirSync(TEST_MIGRATIONS_DIR, { recursive: true });
     fs.writeFileSync(
       path.join(TEST_MIGRATIONS_DIR, "001_test.ts"),
-      `export const up = async () => {}; export const down = async () => {};`
+      `export const up = async () => {}; export const down = async () => {};`,
     );
 
     // Temporarily override config
@@ -306,7 +309,7 @@ export const up = async () => {
 export const down = async () => {
   db.run('DROP TABLE "RunnerTest"');
 };
-`
+`,
     );
 
     const originalDir = (config as any).migrationsDir;
@@ -318,9 +321,10 @@ export const down = async () => {
 
     // Verify table was created
     const table = db
-      .query<{ name: string }, []>(
-        `SELECT name FROM sqlite_master WHERE type='table' AND name='RunnerTest'`
-      )
+      .query<
+        { name: string },
+        []
+      >(`SELECT name FROM sqlite_master WHERE type='table' AND name='RunnerTest'`)
       .get();
     expect(table?.name).toBe("RunnerTest");
 
@@ -347,7 +351,7 @@ export const up = async () => {
 export const down = async () => {
   db.run('DROP TABLE "RollbackTest"');
 };
-`
+`,
     );
 
     const originalDir = (config as any).migrationsDir;
@@ -358,9 +362,10 @@ export const down = async () => {
 
     // Verify table exists
     let table = db
-      .query<{ name: string }, []>(
-        `SELECT name FROM sqlite_master WHERE type='table' AND name='RollbackTest'`
-      )
+      .query<
+        { name: string },
+        []
+      >(`SELECT name FROM sqlite_master WHERE type='table' AND name='RollbackTest'`)
       .get();
     expect(table?.name).toBe("RollbackTest");
 
@@ -370,9 +375,10 @@ export const down = async () => {
 
     // Verify table was dropped
     table = db
-      .query<{ name: string }, []>(
-        `SELECT name FROM sqlite_master WHERE type='table' AND name='RollbackTest'`
-      )
+      .query<
+        { name: string },
+        []
+      >(`SELECT name FROM sqlite_master WHERE type='table' AND name='RollbackTest'`)
       .get();
     expect(table).toBeFalsy();
 
@@ -410,7 +416,7 @@ export const up = async () => {
 export const down = async () => {
   db.run('DROP TABLE "OrderTest"');
 };
-`
+`,
     );
 
     fs.writeFileSync(
@@ -423,7 +429,7 @@ export const up = async () => {
 export const down = async () => {
   db.run('DELETE FROM "OrderTest" WHERE step = 2');
 };
-`
+`,
     );
 
     const originalDir = (config as any).migrationsDir;

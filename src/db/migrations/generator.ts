@@ -1,10 +1,10 @@
 import fs from "fs";
 import path from "path";
-import { generateMilkName } from "./milkWords";
-import { diffSchemas, isDiffEmpty, type SchemaDiff } from "./diff";
-import { getDbSchema, getModelSchema, columnToSql } from "./schema";
-import { config } from "../config";
 import { log } from "../../utils/log";
+import { config } from "../config";
+import { diffSchemas, isDiffEmpty, type SchemaDiff } from "./diff";
+import { generateMilkName } from "./milkWords";
+import { columnToSql, getDbSchema, getModelSchema } from "./schema";
 
 const getMigrationsDir = (): string => {
   return (config as any).migrationsDir || "milk/migrations";
@@ -38,9 +38,14 @@ const generateDescription = (diff: SchemaDiff): string => {
     const tables = [...new Set(diff.columnsToAdd.map((c) => c.table))];
     const firstColumn = diff.columnsToAdd[0];
     const firstTable = tables[0];
-    if (tables.length === 1 && diff.columnsToAdd.length === 1 && firstColumn && firstTable) {
+    if (
+      tables.length === 1 &&
+      diff.columnsToAdd.length === 1 &&
+      firstColumn &&
+      firstTable
+    ) {
       parts.push(
-        `add_${firstColumn.column.name}_to_${firstTable.toLowerCase()}`
+        `add_${firstColumn.column.name}_to_${firstTable.toLowerCase()}`,
       );
     } else {
       parts.push(`add_columns`);
@@ -64,9 +69,7 @@ const generateUpCode = (diff: SchemaDiff): string => {
   // Create tables
   for (const table of diff.tablesToCreate) {
     const columns = table.columns.map((col) => columnToSql(col)).join(", ");
-    lines.push(
-      `  db.run(\`CREATE TABLE "${table.tableName}" (${columns})\`);`
-    );
+    lines.push(`  db.run(\`CREATE TABLE "${table.tableName}" (${columns})\`);`);
   }
 
   // Add columns (SQLite supports ADD COLUMN)
@@ -82,7 +85,9 @@ const generateUpCode = (diff: SchemaDiff): string => {
   ]);
 
   for (const tableName of tablesToRecreate) {
-    lines.push(`  // TODO: SQLite requires table recreation to drop/modify columns`);
+    lines.push(
+      `  // TODO: SQLite requires table recreation to drop/modify columns`,
+    );
     lines.push(`  // See: https://www.sqlite.org/lang_altertable.html`);
     lines.push(`  // Table: ${tableName}`);
   }

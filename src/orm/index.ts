@@ -6,8 +6,8 @@ export * from "./schema/Relation";
 export * from "./schema/relationHelpers";
 export * from "./schema/use";
 
-export * from "./query/QueryBuilder";
 export * from "./query/insert";
+export * from "./query/QueryBuilder";
+export * from "./query/remove";
 export * from "./query/select";
 export * from "./query/update";
-export * from "./query/remove";

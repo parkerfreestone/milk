@@ -3,7 +3,7 @@ import type { CommonColumnOptions } from "../../typeUtils";
 export class Column {
   constructor(
     public type: string | undefined,
-    public options: CommonColumnOptions = {}
+    public options: CommonColumnOptions = {},
   ) {}
 
   toSQL(name: string): string {
@@ -19,8 +19,8 @@ export class Column {
         isSqlKeyword(this.options.default)
           ? this.options.default
           : typeof this.options.default === "string"
-          ? `'${this.options.default}'`
-          : this.options.default;
+            ? `'${this.options.default}'`
+            : this.options.default;
       parts.push(`DEFAULT ${val}`);
     }
 

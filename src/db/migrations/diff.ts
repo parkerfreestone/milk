@@ -1,8 +1,8 @@
 import type {
-  DbTableSchema,
-  ModelTableSchema,
-  ModelColumnSchema,
   DbColumnInfo,
+  DbTableSchema,
+  ModelColumnSchema,
+  ModelTableSchema,
 } from "./schema";
 
 export type ColumnToAdd = {
@@ -31,7 +31,7 @@ export type SchemaDiff = {
 
 export const diffSchemas = (
   modelSchema: Map<string, ModelTableSchema>,
-  dbSchema: Map<string, DbTableSchema>
+  dbSchema: Map<string, DbTableSchema>,
 ): SchemaDiff => {
   const diff: SchemaDiff = {
     tablesToCreate: [],
@@ -95,7 +95,7 @@ export const diffSchemas = (
 
 const hasColumnChanged = (
   modelCol: ModelColumnSchema,
-  dbCol: DbColumnInfo
+  dbCol: DbColumnInfo,
 ): boolean => {
   // Normalize types for comparison
   const normalizedModelType = normalizeType(modelCol.type);
