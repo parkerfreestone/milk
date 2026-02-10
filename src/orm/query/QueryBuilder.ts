@@ -2,6 +2,8 @@ import { db } from "../../db/db";
 import type { OrderByDirection } from "../../typeUtils";
 import { info } from "../../utils/log";
 import { getTableName } from "../../utils/tableName";
+import { getModel, getRelations } from "../schema/modelRegistry";
+import type { Relation } from "../schema/Relation";
 
 type Operator = "=" | "!=" | ">" | ">=" | "<" | "<=" | "LIKE" | "IN" | "NOT IN";
 
@@ -18,6 +20,7 @@ export class QueryBuilder<T extends Record<string, any> = any> {
   private limitCount?: number;
   private offsetCount?: number;
   private selectedFields?: (keyof T)[] | null = null;
+  private withRelations: string[] = [];
 
   constructor(private tableName: string) {}
 
@@ -229,10 +232,26 @@ export class QueryBuilder<T extends Record<string, any> = any> {
     return this;
   }
 
+  /**
+   * Eager load specified relations.
+   * @example select("User").with("posts").all()
+   * @example select("Post").with("author", "comments").all()
+   */
+  with(...relations: string[]) {
+    this.withRelations.push(...relations);
+    return this;
+  }
+
   async all() {
     const [sql, values] = this.buildSql();
     info(`[MILK] - ${sql}`, values);
-    return db.query(sql).all(...values);
+    const rows = db.query(sql).all(...values) as any[];
+
+    if (this.withRelations.length > 0 && rows.length > 0) {
+      return this.loadRelations(rows);
+    }
+
+    return rows;
   }
 
   async first() {
@@ -240,7 +259,180 @@ export class QueryBuilder<T extends Record<string, any> = any> {
       this.limitCount = 1;
     }
     const [sql, values] = this.buildSql();
-    return db.query(sql).get(...values);
+    const row = db.query(sql).get(...values) as any;
+
+    if (this.withRelations.length > 0 && row) {
+      const [withRelations] = await this.loadRelations([row]);
+      return withRelations;
+    }
+
+    return row;
+  }
+
+  private async loadRelations(rows: any[]): Promise<any[]> {
+    const model = getModel(this.tableName);
+    if (!model) return rows;
+
+    const relations = getRelations(model.instance);
+
+    for (const relationName of this.withRelations) {
+      const relation = relations[relationName];
+      if (!relation) {
+        throw new Error(
+          `Relation "${relationName}" not found on model "${this.tableName}"`
+        );
+      }
+
+      await this.loadRelation(rows, relationName, relation);
+    }
+
+    return rows;
+  }
+
+  private async loadRelation(
+    rows: any[],
+    relationName: string,
+    relation: Relation
+  ): Promise<void> {
+    const targetClass = relation.getTarget();
+    const targetModelName = targetClass.name;
+    const targetModel = getModel(targetModelName);
+
+    if (!targetModel) {
+      throw new Error(`Target model "${targetModelName}" not registered`);
+    }
+
+    const targetTableName = getTableName(targetModel.tableName);
+
+    switch (relation.type) {
+      case "belongsTo":
+        await this.loadBelongsTo(
+          rows,
+          relationName,
+          relation,
+          targetTableName
+        );
+        break;
+      case "hasMany":
+        await this.loadHasMany(rows, relationName, relation, targetTableName);
+        break;
+      case "hasOne":
+        await this.loadHasOne(rows, relationName, relation, targetTableName);
+        break;
+    }
+  }
+
+  private async loadBelongsTo(
+    rows: any[],
+    relationName: string,
+    relation: Relation,
+    targetTableName: string
+  ): Promise<void> {
+    // Foreign key is on this model
+    const targetClass = relation.getTarget();
+    const foreignKey =
+      relation.foreignKey ||
+      targetClass.name.charAt(0).toLowerCase() + targetClass.name.slice(1) + "Id";
+    const localKey = relation.localKey;
+
+    // Collect unique foreign key values
+    const fkValues = [...new Set(rows.map((r) => r[foreignKey]).filter(Boolean))];
+    if (fkValues.length === 0) {
+      rows.forEach((r) => (r[relationName] = null));
+      return;
+    }
+
+    // Query related records
+    const placeholders = fkValues.map(() => "?").join(", ");
+    const sql = `SELECT * FROM "${targetTableName}" WHERE "${localKey}" IN (${placeholders})`;
+    info(`[MILK] - ${sql}`, fkValues);
+    const related = db.query(sql).all(...fkValues) as any[];
+
+    // Map by primary key
+    const relatedMap = new Map<any, any>();
+    related.forEach((r) => relatedMap.set(r[localKey], r));
+
+    // Attach to rows
+    rows.forEach((r) => {
+      r[relationName] = relatedMap.get(r[foreignKey]) || null;
+    });
+  }
+
+  private async loadHasMany(
+    rows: any[],
+    relationName: string,
+    relation: Relation,
+    targetTableName: string
+  ): Promise<void> {
+    // Foreign key is on target model
+    const foreignKey =
+      relation.foreignKey ||
+      this.tableName.charAt(0).toLowerCase() + this.tableName.slice(1) + "Id";
+    const localKey = relation.localKey;
+
+    // Collect unique local key values
+    const pkValues = [...new Set(rows.map((r) => r[localKey]).filter(Boolean))];
+    if (pkValues.length === 0) {
+      rows.forEach((r) => (r[relationName] = []));
+      return;
+    }
+
+    // Query related records
+    const placeholders = pkValues.map(() => "?").join(", ");
+    const sql = `SELECT * FROM "${targetTableName}" WHERE "${foreignKey}" IN (${placeholders})`;
+    info(`[MILK] - ${sql}`, pkValues);
+    const related = db.query(sql).all(...pkValues) as any[];
+
+    // Group by foreign key
+    const relatedMap = new Map<any, any[]>();
+    related.forEach((r) => {
+      const fk = r[foreignKey];
+      if (!relatedMap.has(fk)) relatedMap.set(fk, []);
+      relatedMap.get(fk)!.push(r);
+    });
+
+    // Attach to rows
+    rows.forEach((r) => {
+      r[relationName] = relatedMap.get(r[localKey]) || [];
+    });
+  }
+
+  private async loadHasOne(
+    rows: any[],
+    relationName: string,
+    relation: Relation,
+    targetTableName: string
+  ): Promise<void> {
+    // Foreign key is on target model (like hasMany but returns single)
+    const foreignKey =
+      relation.foreignKey ||
+      this.tableName.charAt(0).toLowerCase() + this.tableName.slice(1) + "Id";
+    const localKey = relation.localKey;
+
+    // Collect unique local key values
+    const pkValues = [...new Set(rows.map((r) => r[localKey]).filter(Boolean))];
+    if (pkValues.length === 0) {
+      rows.forEach((r) => (r[relationName] = null));
+      return;
+    }
+
+    // Query related records
+    const placeholders = pkValues.map(() => "?").join(", ");
+    const sql = `SELECT * FROM "${targetTableName}" WHERE "${foreignKey}" IN (${placeholders})`;
+    info(`[MILK] - ${sql}`, pkValues);
+    const related = db.query(sql).all(...pkValues) as any[];
+
+    // Map by foreign key (first match)
+    const relatedMap = new Map<any, any>();
+    related.forEach((r) => {
+      const fk = r[foreignKey];
+      if (!relatedMap.has(fk)) relatedMap.set(fk, r);
+    });
+
+    // Attach to rows
+    rows.forEach((r) => {
+      r[relationName] = relatedMap.get(r[localKey]) || null;
+    });
   }
 
   /**

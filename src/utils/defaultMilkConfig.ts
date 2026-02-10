@@ -5,4 +5,5 @@ export const defaultMilkConfig: MilkConfig = {
   log: true,
   pluralize: false,
   tableCase: "title",
+  migrationsDir: "milk/migrations",
 };

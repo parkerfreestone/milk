@@ -7,6 +7,7 @@ export type MilkConfig = {
   log?: boolean;
   pluralize?: boolean;
   tableCase?: TableCase;
+  migrationsDir?: string;
 };
 
 export type CommonColumnOptions = {

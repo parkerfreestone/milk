@@ -1,4 +1,5 @@
 import { Column } from "./Column";
+import { Relation } from "./Relation";
 import type { ModelMetadata } from "../../typeUtils";
 import { log } from "../../utils/log";
 
@@ -26,4 +27,15 @@ export const getSchema = (instance: any): Record<string, Column> => {
   }
 
   return schema;
+};
+
+export const getRelations = (instance: any): Record<string, Relation> => {
+  const relations: Record<string, Relation> = {};
+
+  for (const key of Object.keys(instance)) {
+    const val = instance[key];
+    if (val instanceof Relation) relations[key] = val;
+  }
+
+  return relations;
 };
