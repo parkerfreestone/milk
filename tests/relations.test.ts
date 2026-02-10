@@ -47,40 +47,42 @@ class AuthorProfile {
   author = belongsTo(() => Author, "authorId");
 }
 
+let aliceId: number;
+let bobId: number;
+let charlieId: number;
+let post1Id: number;
+let post2Id: number;
+let post3Id: number;
+
 beforeAll(() => {
   sync();
 
-  // Clean up tables
-  db.run(`DELETE FROM "Author"`);
-  db.run(`DELETE FROM "Post"`);
-  db.run(`DELETE FROM "Comment"`);
-  db.run(`DELETE FROM "AuthorProfile"`);
+  // Drop and recreate tables to reset autoincrement
+  db.run(`DROP TABLE IF EXISTS "Comment"`);
+  db.run(`DROP TABLE IF EXISTS "AuthorProfile"`);
+  db.run(`DROP TABLE IF EXISTS "Post"`);
+  db.run(`DROP TABLE IF EXISTS "Author"`);
 
-  // Insert test data
-  const insertAuthor = db.prepare(`INSERT INTO "Author" ("name") VALUES (?)`);
-  insertAuthor.run("Alice");
-  insertAuthor.run("Bob");
-  insertAuthor.run("Charlie");
+  db.run(`CREATE TABLE "Author" ("id" INTEGER PRIMARY KEY AUTOINCREMENT, "name" VARCHAR(100))`);
+  db.run(`CREATE TABLE "Post" ("id" INTEGER PRIMARY KEY AUTOINCREMENT, "title" VARCHAR(200), "authorId" INTEGER)`);
+  db.run(`CREATE TABLE "Comment" ("id" INTEGER PRIMARY KEY AUTOINCREMENT, "body" VARCHAR(500), "postId" INTEGER)`);
+  db.run(`CREATE TABLE "AuthorProfile" ("id" INTEGER PRIMARY KEY AUTOINCREMENT, "bio" VARCHAR(500), "authorId" INTEGER)`);
 
-  const insertPost = db.prepare(
-    `INSERT INTO "Post" ("title", "authorId") VALUES (?, ?)`,
-  );
-  insertPost.run("Alice Post 1", 1);
-  insertPost.run("Alice Post 2", 1);
-  insertPost.run("Bob Post 1", 2);
+  // Insert test data and capture IDs
+  aliceId = Number(db.run(`INSERT INTO "Author" ("name") VALUES (?)`, ["Alice"]).lastInsertRowid);
+  bobId = Number(db.run(`INSERT INTO "Author" ("name") VALUES (?)`, ["Bob"]).lastInsertRowid);
+  charlieId = Number(db.run(`INSERT INTO "Author" ("name") VALUES (?)`, ["Charlie"]).lastInsertRowid);
 
-  const insertComment = db.prepare(
-    `INSERT INTO "Comment" ("body", "postId") VALUES (?, ?)`,
-  );
-  insertComment.run("Great post!", 1);
-  insertComment.run("Thanks!", 1);
-  insertComment.run("Nice work", 2);
+  post1Id = Number(db.run(`INSERT INTO "Post" ("title", "authorId") VALUES (?, ?)`, ["Alice Post 1", aliceId]).lastInsertRowid);
+  post2Id = Number(db.run(`INSERT INTO "Post" ("title", "authorId") VALUES (?, ?)`, ["Alice Post 2", aliceId]).lastInsertRowid);
+  post3Id = Number(db.run(`INSERT INTO "Post" ("title", "authorId") VALUES (?, ?)`, ["Bob Post 1", bobId]).lastInsertRowid);
 
-  const insertProfile = db.prepare(
-    `INSERT INTO "AuthorProfile" ("bio", "authorId") VALUES (?, ?)`,
-  );
-  insertProfile.run("Alice is a writer", 1);
-  insertProfile.run("Bob is a developer", 2);
+  db.run(`INSERT INTO "Comment" ("body", "postId") VALUES (?, ?)`, ["Great post!", post1Id]);
+  db.run(`INSERT INTO "Comment" ("body", "postId") VALUES (?, ?)`, ["Thanks!", post1Id]);
+  db.run(`INSERT INTO "Comment" ("body", "postId") VALUES (?, ?)`, ["Nice work", post2Id]);
+
+  db.run(`INSERT INTO "AuthorProfile" ("bio", "authorId") VALUES (?, ?)`, ["Alice is a writer", aliceId]);
+  db.run(`INSERT INTO "AuthorProfile" ("bio", "authorId") VALUES (?, ?)`, ["Bob is a developer", bobId]);
 });
 
 describe("belongsTo relation", () => {
@@ -116,7 +118,7 @@ describe("belongsTo relation", () => {
 
   test("works with first()", async () => {
     const post: any = await select("Post" as any)
-      .where({ id: 1 })
+      .where({ id: post1Id })
       .with("author")
       .first();
 
@@ -208,7 +210,7 @@ describe("multiple relations", () => {
       .with("author", "comments")
       .all();
 
-    const post1 = posts.find((p) => p.id === 1);
+    const post1 = posts.find((p) => p.id === post1Id);
     expect(post1.author.name).toBe("Alice");
     expect(post1.comments.length).toBe(2);
     expect(post1.comments[0].body).toBe("Great post!");
